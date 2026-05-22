@@ -120,7 +120,7 @@ const HomePage = () => {
             >
               <div className="absolute inset-0 bg-gradient-to-tr from-[hsl(var(--secondary))] to-[hsl(var(--primary))] blur-3xl opacity-30 rounded-full"></div>
               <img 
-                src="https://horizons-cdn.hostinger.com/199f3cd1-dc09-46fb-a1ee-f1f869dd2b91/e5dbe2f4bce4c18fae16d60bacff90b4.png"
+                src="/guia-capa.png"
                 alt="Guia Completo - Imigração para Espanha com Visto de Estudante"
                 loading="eager"
                 className="w-full max-w-sm mx-auto rounded-2xl shadow-2xl relative z-10 border border-white/10 transform rotate-2 hover:rotate-0 transition-transform duration-500 h-auto"
@@ -562,7 +562,7 @@ const HomePage = () => {
                 <div className="md:col-span-2 bg-muted/30 p-8 md:p-10 flex items-center justify-center relative overflow-hidden">
                   <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent pointer-events-none"></div>
                   <img 
-                    src="https://horizons-cdn.hostinger.com/199f3cd1-dc09-46fb-a1ee-f1f869dd2b91/e5dbe2f4bce4c18fae16d60bacff90b4.png"
+                    src="/guia-capa.png"
                     alt="Guia Completo - Imigração para Espanha com Visto de Estudante"
                     loading="lazy"
                     className="w-full max-w-[200px] md:max-w-xs mx-auto rounded-xl shadow-xl relative z-10 transform -rotate-3 hover:rotate-0 transition-transform duration-500 h-auto"
