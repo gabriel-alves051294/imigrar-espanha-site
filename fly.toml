@@ -1,0 +1,51 @@
+# ────────────────────────────────────────────────────────────────────
+# Configuração Fly.io para o backend PocketBase.
+#
+# Antes do primeiro deploy:
+#   flyctl auth signup            # ou: flyctl auth login
+#   flyctl apps create imigrar-espanha-pb
+#   flyctl volumes create pb_data --size 1 --region gru
+#   flyctl secrets set \
+#     PB_ENCRYPTION_KEY=$(openssl rand -hex 32) \
+#     OPENAI_API_KEY=sk-...
+#   flyctl deploy
+# ────────────────────────────────────────────────────────────────────
+
+app = "imigrar-espanha-pb"
+primary_region = "gru"   # São Paulo. Trocar se preferir outra região.
+
+[build]
+  dockerfile = "Dockerfile"
+
+[env]
+  # PocketBase escuta nesta porta dentro do container.
+  PORT = "8090"
+
+[[mounts]]
+  source = "pb_data"
+  destination = "/data"
+
+[http_service]
+  internal_port = 8090
+  force_https = true
+  auto_stop_machines = "off"   # PB com chat realtime/SSE — NÃO hibernar.
+  auto_start_machines = true
+  min_machines_running = 1
+  processes = ["app"]
+
+  [http_service.concurrency]
+    type = "requests"
+    soft_limit = 200
+    hard_limit = 250
+
+[[http_service.checks]]
+  interval = "30s"
+  timeout = "5s"
+  grace_period = "20s"
+  method = "GET"
+  path = "/api/health"
+
+[[vm]]
+  size = "shared-cpu-1x"
+  memory = "256mb"
+  cpus = 1

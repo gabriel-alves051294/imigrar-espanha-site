@@ -1,0 +1,43 @@
+<IfModule mod_rewrite.c>
+	RewriteEngine On
+	RewriteBase /
+
+	# Force HTTPS (recommended for AdSense + OAuth)
+	RewriteCond %{HTTPS} off
+	RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+	# SPA fallback
+	RewriteCond %{REQUEST_FILENAME} !-f
+	RewriteCond %{REQUEST_FILENAME} !-d
+	RewriteRule ^ index.html [L]
+</IfModule>
+
+<IfModule mod_headers.c>
+	Header set X-Powered-By "Hostinger Horizons"
+
+	# Cache everything on CDN by default
+	Header set Cache-Control "public, s-maxage=604800, max-age=0"
+
+	# Cache in browser all assets
+	<If "%{REQUEST_URI} =~ m#^/assets/.*$#">
+		Header set Cache-Control "public, max-age=604800"
+	</If>
+
+	# Security headers — chosen to NOT break Google AdSense (which uses iframes
+	# and cross-origin scripts). Do NOT add X-Frame-Options DENY or
+	# Cross-Origin-Embedder-Policy require-corp here.
+	Header set X-Content-Type-Options "nosniff"
+	Header set Referrer-Policy "strict-origin-when-cross-origin"
+	Header set Permissions-Policy "geolocation=(), microphone=(), camera=(), payment=()"
+
+	# ads.txt must be served as text/plain or AdSense rejects it
+	<If "%{REQUEST_URI} == '/ads.txt'">
+		Header set Content-Type "text/plain"
+		Header set Cache-Control "public, max-age=3600"
+	</If>
+</IfModule>
+
+# Compression — saves bandwidth on JSON/JS/CSS responses
+<IfModule mod_deflate.c>
+	AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css text/javascript application/javascript application/json image/svg+xml
+</IfModule>

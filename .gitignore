@@ -1,0 +1,84 @@
+# ──────────────────────────────────────────────
+# Dependencies
+# ──────────────────────────────────────────────
+node_modules/
+**/node_modules/
+.pnp
+.pnp.js
+
+# ──────────────────────────────────────────────
+# Build outputs
+# ──────────────────────────────────────────────
+dist/
+build/
+**/dist/
+**/build/
+.vite/
+**/.vite/
+
+# ──────────────────────────────────────────────
+# Env files (secrets — NUNCA commitar)
+# ──────────────────────────────────────────────
+.env
+.env.local
+.env.*.local
+**/.env
+**/.env.local
+**/.env.*.local
+# Exceção: manter o .env.example como template público
+!.env.example
+!**/.env.example
+
+# ──────────────────────────────────────────────
+# PocketBase
+# ──────────────────────────────────────────────
+# Dados persistentes do PB (volume mount no Fly)
+apps/pocketbase/pb_data/
+apps/pocketbase/pb_data_backup/
+# Binário (baixado durante build)
+apps/pocketbase/pocketbase
+apps/pocketbase/pocketbase.exe
+# Cache de tipos auto-gerado
+apps/pocketbase/pb_data/types.d.ts
+
+# ──────────────────────────────────────────────
+# Logs
+# ──────────────────────────────────────────────
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# ──────────────────────────────────────────────
+# Editor / OS
+# ──────────────────────────────────────────────
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ──────────────────────────────────────────────
+# Fly.io
+# ──────────────────────────────────────────────
+.fly/
+fly.toml.bak
+
+# ──────────────────────────────────────────────
+# Misc
+# ──────────────────────────────────────────────
+*.tmp
+*.bak
+coverage/
+.nyc_output/
+
+# ──────────────────────────────────────────────
+# Build artifacts / tarballs (não commitar)
+# ──────────────────────────────────────────────
+*.tar.gz
+*.tgz
+*.zip
+app.tar.gz

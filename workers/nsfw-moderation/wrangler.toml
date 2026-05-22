@@ -1,0 +1,11 @@
+name = "nsfw-moderation"
+main = "src/worker.js"
+compatibility_date = "2025-05-01"
+
+# Free plan limits: 100k requests/day, 10ms CPU per request.
+# Vision SafeSearch call is the bottleneck (~300-600ms wall time, low CPU).
+
+# Set after deploy:
+#   wrangler secret put VISION_API_KEY
+#   wrangler secret put ALLOWED_ORIGIN
+#   (optional) wrangler secret put MAX_BYTES

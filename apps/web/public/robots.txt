@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Disallow: /auth/
+Disallow: /comunidade/chat
+Disallow: /api/
+
+Sitemap: https://imigrarparaespanha.com.br/sitemap.xml

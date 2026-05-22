@@ -1,0 +1,32 @@
+# Frontend — vai para Vercel.
+apps/web/
+dist/
+node_modules/
+**/node_modules/
+
+# Binários e dados locais.
+apps/pocketbase/pocketbase
+apps/pocketbase/pb_data/
+
+# Workers — deploy separado no Cloudflare.
+workers/
+
+# Arquivos versionados/extras.
+.git/
+.gitignore
+.github/
+*.log
+.env
+.env.local
+**/.env
+**/.env.local
+app.tar.gz
+
+# Docs (não precisam dentro da imagem do backend).
+apps/web/docs/
+
+# IDE / OS noise.
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

@@ -1,0 +1,243 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Outfit:wght@300;400;500;600;700;800&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 222 47% 11%;
+    
+    --primary: 222 47% 11%;
+    --primary-foreground: 210 40% 98%;
+    
+    --secondary: 262 80% 50%;
+    --secondary-foreground: 210 40% 98%;
+    
+    --accent: 262 80% 50%;
+    --accent-foreground: 210 40% 98%;
+    
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+    
+    --card: 0 0% 100%;
+    --card-foreground: 222 47% 11%;
+    
+    --popover: 0 0% 100%;
+    --popover-foreground: 222 47% 11%;
+    
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 262 80% 50%;
+    
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+    
+    --radius: 0.75rem;
+
+    --brazil-green: 142 75% 31%;
+    --brazil-yellow: 51 100% 50%;
+    --brazil-blue: 217 100% 15%;
+    --spain-red: 354 100% 39%;
+    --spain-yellow: 45 100% 50%;
+
+    --trust: 142 71% 45%;
+    --trust-foreground: 0 0% 100%;
+    --urgency: 15 85% 55%;
+    --urgency-foreground: 0 0% 100%;
+
+    /* Community Tokens */
+    --community-bg: 210 40% 98%;
+    --forum-card: 0 0% 100%;
+    --blog-accent: 217 100% 15%;
+  }
+  
+  .dark {
+    --background: 222 47% 11%;
+    --foreground: 210 40% 98%;
+    
+    --primary: 210 40% 98%;
+    --primary-foreground: 222 47% 11%;
+    
+    --secondary: 262 80% 60%;
+    --secondary-foreground: 210 40% 98%;
+    
+    --accent: 262 80% 60%;
+    --accent-foreground: 210 40% 98%;
+    
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+    
+    --card: 222 47% 11%;
+    --card-foreground: 210 40% 98%;
+    
+    --popover: 222 47% 11%;
+    --popover-foreground: 210 40% 98%;
+    
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 262 80% 60%;
+    
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+
+    --brazil-green: 142 75% 31%;
+    --brazil-yellow: 51 100% 50%;
+    --brazil-blue: 217 100% 15%;
+    --spain-red: 354 100% 39%;
+    --spain-yellow: 45 100% 50%;
+
+    --trust: 142 71% 40%;
+    --trust-foreground: 0 0% 100%;
+    --urgency: 15 85% 60%;
+    --urgency-foreground: 0 0% 100%;
+
+    /* Community Tokens */
+    --community-bg: 222 47% 8%;
+    --forum-card: 222 47% 13%;
+    --blog-accent: 217 100% 60%;
+  }
+  
+  * {
+    border-color: hsl(var(--border));
+  }
+  
+  html {
+    scroll-behavior: smooth;
+  }
+  
+  body {
+    font-family: "DM Sans", sans-serif;
+    background-color: hsl(var(--background));
+    color: hsl(var(--foreground));
+    overflow-x: clip;
+    line-height: 1.625;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    font-family: "Outfit", sans-serif;
+    text-wrap: balance;
+    line-height: 1.2;
+  }
+  
+  h1 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+  
+  h2 {
+    font-size: 2rem;
+    font-weight: 600;
+  }
+  
+  h3 {
+    font-size: 1.5rem;
+    font-weight: 600;
+  }
+  
+  @media (min-width: 768px) {
+    h1 {
+      font-size: 3.5rem;
+    }
+    h2 {
+      font-size: 2.5rem;
+    }
+  }
+  
+  @media (min-width: 1024px) {
+    h1 {
+      font-size: 4rem;
+    }
+  }
+
+  *:focus-visible {
+    outline: 2px solid hsl(var(--ring));
+    outline-offset: 2px;
+  }
+}
+
+@layer components {
+  .container {
+    max-width: 1280px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+  
+  @media (min-width: 1024px) {
+    .container {
+      padding-left: 2rem;
+      padding-right: 2rem;
+    }
+  }
+
+  .prose {
+    color: hsl(var(--foreground));
+    max-width: 65ch;
+  }
+
+  .prose h1, .prose h2, .prose h3, .prose h4 {
+    color: hsl(var(--foreground));
+    margin-top: 2em;
+    margin-bottom: 1em;
+  }
+
+  .prose p {
+    margin-top: 1.25em;
+    margin-bottom: 1.25em;
+  }
+
+  .prose ul {
+    list-style-type: disc;
+    padding-left: 1.5em;
+    margin-top: 1em;
+    margin-bottom: 1em;
+  }
+
+  .prose li {
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+  }
+
+  .prose a {
+    color: hsl(var(--primary));
+    text-decoration: underline;
+    font-weight: 500;
+  }
+
+  a[href^="mailto:"] {
+    white-space: nowrap;
+  }
+
+  /* Community Layouts */
+  .ad-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: hsl(var(--muted));
+    border: 1px dashed hsl(var(--border));
+    border-radius: hsl(var(--radius));
+    min-height: 100px;
+    margin-top: 1.5rem;
+    margin-bottom: 1.5rem;
+    overflow: hidden;
+  }
+
+  .chat-layout {
+    display: grid;
+    grid-template-rows: 1fr auto;
+    height: calc(100vh - 80px); /* Adjust based on header */
+    background-color: hsl(var(--community-bg));
+  }
+}
+
+@layer utilities {
+  .transition-all {
+    transition-property: all;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 300ms;
+  }
+}
