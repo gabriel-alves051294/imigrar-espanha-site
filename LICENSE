@@ -1,0 +1,235 @@
+SOURCE-AVAILABLE PROPRIETARY LICENSE
+Version 1.0 — May 2026
+
+Copyright (c) 2026 Gabriel Alves Izaias. All Rights Reserved.
+
+This license governs use of the source code contained in this repository
+(the "Software"). By accessing, viewing, downloading, cloning, forking,
+or otherwise interacting with the Software, you agree to be bound by the
+terms of this license. If you do not agree, do not access the Software.
+
+────────────────────────────────────────────────────────────────────────
+1. DEFINITIONS
+────────────────────────────────────────────────────────────────────────
+
+1.1. "Author" means Gabriel Alves Izaias, the sole copyright holder of
+     the Software and any derivative works thereof.
+
+1.2. "Software" means all source code, configuration files, schemas,
+     migrations, hooks, documentation, copy, layouts, visual designs,
+     marketing assets, sales-funnel logic, and any other materials
+     contained in this repository, including all historical versions
+     accessible through version control history.
+
+1.3. "Infoproduct" means the commercial educational product on Spanish
+     immigration whose sales page, conversion architecture, and
+     gamification mechanics are embedded in or supported by the Software.
+
+1.4. "Personal Study" means individual, non-commercial review of the
+     source code of the Software for educational, research, or
+     professional learning purposes by a single natural person.
+
+1.5. "Security Audit" means good-faith inspection of the Software for
+     the sole purpose of identifying security vulnerabilities, conducted
+     under the disclosure rules of the SECURITY.md file in this
+     repository.
+
+1.6. "Contribution" means any patch, bug fix, feature, documentation
+     improvement, or other change submitted to the Author via a Pull
+     Request, issue, or any other channel.
+
+────────────────────────────────────────────────────────────────────────
+2. PERMITTED USES
+────────────────────────────────────────────────────────────────────────
+
+Subject to your full compliance with this license, you are expressly
+permitted to:
+
+(a) View and read the source code of the Software for Personal Study;
+
+(b) Conduct Security Audits in good faith and report findings to the
+    Author through the channels described in SECURITY.md;
+
+(c) Clone the repository locally for the limited and exclusive purpose
+    of carrying out (a) or (b) above, or of preparing a Contribution
+    under (d) below;
+
+(d) Submit Contributions to the Author through GitHub Pull Requests.
+    By submitting a Contribution, you irrevocably and exclusively
+    assign to the Author all worldwide copyright and related rights in
+    that Contribution, and warrant that (i) the Contribution is your
+    original work, (ii) you have the legal right to make such
+    assignment, and (iii) the Contribution does not infringe any
+    third-party rights;
+
+(e) Quote brief, limited excerpts of the source code in technical
+    articles, tutorials, or academic publications, provided that
+    proper attribution to the Author and the repository URL is given
+    and the excerpt does not exceed what is strictly necessary for the
+    point being made.
+
+────────────────────────────────────────────────────────────────────────
+3. PROHIBITED USES
+────────────────────────────────────────────────────────────────────────
+
+Without explicit prior written authorization from the Author, you are
+STRICTLY PROHIBITED from:
+
+(a) Copying, reusing, adapting, translating, or porting any portion of
+    the user interface, layout, visual design, page composition,
+    component hierarchy, content structure, or copywriting of the
+    Software, in whole or in part, into any other project, commercial
+    or otherwise;
+
+(b) Reverse-engineering, decompiling, observing, disassembling, or
+    otherwise attempting to derive the business logic, sales funnel,
+    conversion architecture, pricing strategy, gamification mechanics,
+    moderation thresholds, or any other commercially-sensitive logic
+    embedded in or implied by the Software or the Infoproduct;
+
+(c) Sublicensing, redistributing, mirroring, or republishing the
+    Software or any derivative work, in source or compiled form,
+    through any channel — including but not limited to other Git
+    repositories (public or private), package registries, content
+    delivery networks, file-sharing services, paid or free
+    marketplaces, AI training datasets, or generative model fine-tunes;
+
+(d) Creating, hosting, deploying, operating, or marketing any
+    competing immigration community platform, infoproduct landing
+    page, gamification system, moderation pipeline, or any other
+    commercial product that derives, in whole or in part, from the
+    Software, the Infoproduct, or the Author's documented strategies;
+
+(e) Selling, leasing, renting, white-labeling, or otherwise
+    commercially exploiting the Software, in original or modified
+    form, directly or indirectly, including through advertising,
+    affiliate programs, lead generation, data resale, or any other
+    monetization model;
+
+(f) Removing, obscuring, altering, or circumventing any copyright
+    notice, license header, watermark, attribution, or technical
+    protection measure included in the Software;
+
+(g) Using the Author's name, voice, image, persona, professional
+    credentials, social media profiles, or any associated trademarks
+    to endorse, promote, or imply association with any product,
+    service, or content derived from the Software;
+
+(h) Training, fine-tuning, or otherwise using the Software (in whole
+    or in part) as input to any machine-learning model, large language
+    model, code-generation system, or similar technology, whether for
+    commercial or non-commercial purposes;
+
+(i) Using the Software to develop, host, or distribute malicious code,
+    phishing pages, scam infrastructure, or any product that violates
+    applicable law.
+
+────────────────────────────────────────────────────────────────────────
+4. THIRD-PARTY COMPONENTS
+────────────────────────────────────────────────────────────────────────
+
+The Software depends on, integrates with, or interoperates with
+third-party libraries, frameworks, and services — including but not
+limited to React, Vite, TailwindCSS, shadcn/ui, PocketBase, OpenAI,
+Fly.io, Vercel, and Hotmart. Each such component is governed by its
+own respective license and terms of service. Nothing in this license
+modifies, replaces, or supersedes your obligations under those
+third-party terms.
+
+────────────────────────────────────────────────────────────────────────
+5. NO WARRANTY
+────────────────────────────────────────────────────────────────────────
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, NON-INFRINGEMENT,
+AND ACCURACY. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY CLAIM,
+DAMAGES, LOSS OF DATA, LOSS OF PROFITS, OR OTHER LIABILITY, WHETHER IN
+AN ACTION OF CONTRACT, TORT, OR OTHERWISE, ARISING FROM, OUT OF, OR IN
+CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+────────────────────────────────────────────────────────────────────────
+6. TERMINATION
+────────────────────────────────────────────────────────────────────────
+
+This license is effective until terminated. Your rights under this
+license will terminate automatically and without prior notice if you
+fail to comply with any of its terms. Upon termination, you must
+immediately cease all use of the Software and destroy all copies in
+your possession or control, whether on local storage, cloud storage,
+backup media, or any other medium.
+
+The Author reserves the right to enforce this license through any legal
+remedy available under Brazilian and applicable international law,
+including but not limited to injunctive relief, monetary damages, and
+recovery of attorneys' fees.
+
+────────────────────────────────────────────────────────────────────────
+7. GOVERNING LAW AND JURISDICTION
+────────────────────────────────────────────────────────────────────────
+
+This license shall be governed by and construed in accordance with the
+laws of the Federative Republic of Brazil, without regard to its
+conflict-of-laws principles. Any dispute, controversy, or claim arising
+out of or in connection with this license shall be subject to the
+exclusive jurisdiction of the courts of the Comarca de Belo Horizonte,
+State of Minas Gerais, Brazil.
+
+────────────────────────────────────────────────────────────────────────
+8. COMMERCIAL LICENSING
+────────────────────────────────────────────────────────────────────────
+
+For any use outside the scope of Section 2 — including but not limited
+to commercial use, white-label licensing, sublicensing, redistribution,
+or deployment of derivative works — you must obtain a separate written
+commercial license from the Author. Contact the Author by opening a
+GitHub Issue tagged "commercial-license" or through the channels listed
+in the project README.
+
+════════════════════════════════════════════════════════════════════════
+RESUMO INFORMATIVO EM PORTUGUÊS
+(Para conveniência do leitor — em caso de divergência, prevalece o
+texto em inglês acima, que é a versão oficial e juridicamente
+vinculante deste documento.)
+════════════════════════════════════════════════════════════════════════
+
+Esta é uma Licença Proprietária do tipo "Source-Available" (Código
+Disponível). Todos os direitos sobre o código, layouts, copywriting,
+arquitetura de funil de vendas e lógica do infoproduto estão
+exclusivamente reservados a Gabriel Alves Izaias.
+
+VOCÊ PODE:
+  • Visualizar e ler o código-fonte para estudo pessoal e não comercial.
+  • Conduzir auditorias de segurança de boa-fé e reportar
+    vulnerabilidades conforme o arquivo SECURITY.md.
+  • Submeter Pull Requests com correções e melhorias (você cede os
+    direitos da contribuição ao Autor ao enviá-la).
+  • Citar trechos curtos do código em artigos técnicos ou acadêmicos
+    com atribuição adequada.
+
+VOCÊ NÃO PODE (sem autorização prévia por escrito):
+  • Copiar layouts, design, copywriting ou estrutura de páginas para
+    qualquer outro projeto.
+  • Fazer engenharia reversa do infoproduto, do funil de vendas ou da
+    lógica de gamificação.
+  • Sublicenciar, redistribuir, espelhar ou republicar o código em
+    qualquer canal (incluindo outros repositórios, registries, AI
+    training datasets ou marketplaces).
+  • Criar, operar ou comercializar qualquer plataforma concorrente
+    derivada deste código ou do infoproduto.
+  • Vender, alugar ou explorar comercialmente o código de qualquer
+    forma direta ou indireta.
+  • Remover ou alterar avisos de copyright e atribuições.
+  • Usar o nome ou imagem do Autor para promover produtos derivados.
+  • Usar o código como input para treinamento de modelos de IA.
+
+LICENCIAMENTO COMERCIAL:
+  Para qualquer uso fora do escopo permitido — incluindo white-label,
+  uso corporativo ou redistribuição — entre em contato com o Autor
+  através de uma Issue do GitHub marcada com "commercial-license".
+
+JURISDIÇÃO:
+  Foro da Comarca de Belo Horizonte, Minas Gerais, Brasil.
+
+─── End of License ────────────────────────────────────────────────────

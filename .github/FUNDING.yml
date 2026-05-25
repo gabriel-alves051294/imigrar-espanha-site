@@ -1,0 +1,11 @@
+# GitHub Sponsors / Funding configuration
+# Activates the native "Sponsor" button on the repository page.
+# https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/displaying-a-sponsor-button-in-your-repository
+
+# Buy Me a Coffee (international support)
+buy_me_a_coffee: gabrielalvk
+
+# Custom funding options
+custom:
+  - "https://buymeacoffee.com/gabrielalvk"
+  - "PIX (Brasil): 31994960367 — Gabriel Alves Izaias"
