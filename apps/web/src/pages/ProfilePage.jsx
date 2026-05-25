@@ -1,20 +1,28 @@
 // ProfilePage — exibe rank, pontos, breakdown e barra de progressao.
 // Tier "cidadao" transforma painel em layout de "Passaporte Europeu Biometrico".
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Helmet } from 'react-helmet';
+import { toast } from 'sonner';
 import pb from '@/lib/pocketbase.js';
 import { useAuth } from '@/contexts/AuthContext.jsx';
 import { computeRank, pointsToNextTier, RANKS } from '@/lib/rank.js';
 import RankedAvatar from '@/components/RankedAvatar.jsx';
 import RankBadge from '@/components/RankBadge.jsx';
 import { Skeleton } from '@/components/ui/skeleton';
-import { Trophy, Calendar, Sparkles, MessageSquare, FileText, MessagesSquare, Send } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Trophy, Calendar, Sparkles, MessageSquare, FileText, MessagesSquare, Send, Camera, Trash2, Loader2 } from 'lucide-react';
+
+// Restricoes do campo `avatar` na collection profiles (PB migration)
+const AVATAR_MAX_MB = 5; // usuario nao precisa de 20MB
+const AVATAR_TYPES = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
 
 const ProfilePage = () => {
   const { session } = useAuth();
   const [profile, setProfile] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [isUploading, setIsUploading] = useState(false);
+  const fileInputRef = useRef(null);
 
   useEffect(() => {
     const load = async () => {
@@ -30,6 +38,51 @@ const ProfilePage = () => {
     };
     load();
   }, [session]);
+
+  const handleAvatarPick = () => fileInputRef.current?.click();
+
+  const handleAvatarChange = async (e) => {
+    const file = e.target.files?.[0];
+    e.target.value = ''; // reset pra permitir re-upload do mesmo arquivo
+    if (!file || !session?.id) return;
+
+    if (!AVATAR_TYPES.includes(file.type)) {
+      toast.error('Formato inválido. Use JPG, PNG, GIF ou WEBP.');
+      return;
+    }
+    if (file.size > AVATAR_MAX_MB * 1024 * 1024) {
+      toast.error(`Imagem muito grande. Máximo ${AVATAR_MAX_MB}MB.`);
+      return;
+    }
+
+    setIsUploading(true);
+    try {
+      const fd = new FormData();
+      fd.append('avatar', file);
+      const updated = await pb.collection('profiles').update(session.id, fd, { $autoCancel: false });
+      setProfile(updated);
+      toast.success('Foto atualizada!');
+    } catch (err) {
+      console.error('[ProfilePage] avatar upload failed:', err);
+      toast.error(err?.response?.message || 'Falha ao enviar foto.');
+    } finally {
+      setIsUploading(false);
+    }
+  };
+
+  const handleAvatarRemove = async () => {
+    if (!session?.id || !profile?.avatar) return;
+    setIsUploading(true);
+    try {
+      const updated = await pb.collection('profiles').update(session.id, { avatar: null }, { $autoCancel: false });
+      setProfile(updated);
+      toast.success('Foto removida.');
+    } catch (err) {
+      toast.error('Falha ao remover foto.');
+    } finally {
+      setIsUploading(false);
+    }
+  };
 
   if (isLoading) {
     return (
@@ -52,11 +105,24 @@ const ProfilePage = () => {
   const avatarUrl = profile.avatar ? pb.files.getUrl(profile, profile.avatar) : '';
   const isCidadao = rank.tier === 'cidadao';
 
+  // Input file global (compartilhado por ambos os layouts)
+  const fileInputEl = (
+    <input
+      ref={fileInputRef}
+      type="file"
+      accept={AVATAR_TYPES.join(',')}
+      onChange={handleAvatarChange}
+      className="hidden"
+      aria-label="Selecionar foto de perfil"
+    />
+  );
+
   // Tier final = layout "Passaporte"
   if (isCidadao) {
     return (
       <div className="bg-background min-h-screen py-12">
         <Helmet><title>Meu Passaporte | Comunidade</title></Helmet>
+        {fileInputEl}
         <div className="container max-w-3xl mx-auto px-4">
           <div className="relative rounded-2xl overflow-hidden border-4 border-yellow-500/60 shadow-2xl bg-gradient-to-br from-red-900 via-red-800 to-red-950 text-yellow-100 p-8 md:p-10">
             {/* Faixa superior */}
@@ -68,7 +134,16 @@ const ProfilePage = () => {
             <div className="absolute top-6 right-6 w-10 h-10 rounded-md bg-gradient-to-br from-yellow-400 to-yellow-600 opacity-80" aria-hidden="true" />
             {/* Conteudo */}
             <div className="flex flex-col md:flex-row gap-8 items-center md:items-start">
-              <RankedAvatar profile={profile} src={avatarUrl} size={140} />
+              <div className="flex flex-col items-center gap-2">
+                <RankedAvatar profile={profile} src={avatarUrl} size={140} />
+                <AvatarControls
+                  hasAvatar={!!profile.avatar}
+                  isUploading={isUploading}
+                  onPick={handleAvatarPick}
+                  onRemove={handleAvatarRemove}
+                  variant="royal"
+                />
+              </div>
               <div className="flex-1 text-center md:text-left">
                 <div className="text-xs uppercase tracking-widest opacity-60 mb-1">Apellidos / Nombre</div>
                 <h1 className="text-3xl md:text-4xl font-extrabold tracking-tight mb-3 text-yellow-50">
@@ -106,10 +181,19 @@ const ProfilePage = () => {
   return (
     <div className="bg-background min-h-screen py-12">
       <Helmet><title>Meu Perfil | Comunidade</title></Helmet>
+      {fileInputEl}
       <div className="container max-w-3xl mx-auto px-4 space-y-8">
         <div className="rounded-2xl border bg-card p-6 md:p-8">
           <div className="flex flex-col md:flex-row gap-6 items-center md:items-start">
-            <RankedAvatar profile={profile} src={avatarUrl} size={100} />
+            <div className="flex flex-col items-center gap-2">
+              <RankedAvatar profile={profile} src={avatarUrl} size={100} />
+              <AvatarControls
+                hasAvatar={!!profile.avatar}
+                isUploading={isUploading}
+                onPick={handleAvatarPick}
+                onRemove={handleAvatarRemove}
+              />
+            </div>
             <div className="flex-1 text-center md:text-left">
               <h1 className="text-2xl md:text-3xl font-bold mb-2">{profile.name}</h1>
               <RankBadge profile={profile} size="md" />
@@ -170,6 +254,45 @@ const ProfilePage = () => {
           </ul>
         </div>
       </div>
+    </div>
+  );
+};
+
+// Controles de upload/remocao de avatar. variant="royal" usa cor amber pro layout passaporte.
+const AvatarControls = ({ hasAvatar, isUploading, onPick, onRemove, variant }) => {
+  const isRoyal = variant === 'royal';
+  const btnBase = 'inline-flex items-center gap-1 text-xs font-medium rounded-full px-3 py-1 transition-colors disabled:opacity-50 disabled:cursor-not-allowed';
+  const primary = isRoyal
+    ? 'bg-yellow-500/20 text-yellow-100 hover:bg-yellow-500/30 border border-yellow-400/40'
+    : 'bg-primary/10 text-primary hover:bg-primary/20 border border-primary/20';
+  const danger = isRoyal
+    ? 'text-red-300 hover:text-red-200 hover:bg-red-500/10'
+    : 'text-destructive hover:bg-destructive/10';
+
+  return (
+    <div className="flex items-center gap-2 mt-2">
+      <button
+        type="button"
+        onClick={onPick}
+        disabled={isUploading}
+        className={`${btnBase} ${primary}`}
+        title={hasAvatar ? 'Trocar foto' : 'Adicionar foto (opcional)'}
+      >
+        {isUploading ? <Loader2 className="h-3 w-3 animate-spin" /> : <Camera className="h-3 w-3" />}
+        {hasAvatar ? 'Trocar' : 'Foto'}
+      </button>
+      {hasAvatar && (
+        <button
+          type="button"
+          onClick={onRemove}
+          disabled={isUploading}
+          className={`${btnBase} ${danger}`}
+          title="Remover foto"
+        >
+          <Trash2 className="h-3 w-3" />
+          Remover
+        </button>
+      )}
     </div>
   );
 };
