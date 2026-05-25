@@ -29,7 +29,7 @@ routerAdd("GET", "/debug/env", (e) => {
 
 // Testa conectividade real com OpenAI
 routerAdd("GET", "/debug/openai-ping", (e) => {
-    const key = ($os.getenv("OPENAI_API_KEY") || "").trim();
+    const key = ($os.getenv("OPENAI_API_KEY") || "").replace(/[\x00-\x1F\x7F]/g, "").trim();
     if (!key) return e.json(500, { error: "OPENAI_API_KEY not set" });
     try {
         const resp = $http.send({
