@@ -109,16 +109,18 @@ const AboutPage = () => {
               transition={{ duration: 0.6, delay: 0.2 }}
               className="order-1 lg:order-2 lg:sticky lg:top-24"
             >
-              <div className="relative rounded-2xl overflow-hidden shadow-xl border border-border/60 aspect-[4/5] md:aspect-[3/4] lg:aspect-[4/5] group max-w-md mx-auto lg:ml-auto lg:mr-0">
-                <img 
-                  src="https://horizons-cdn.hostinger.com/199f3cd1-dc09-46fb-a1ee-f1f869dd2b91/b1c403473563377d4ff48bbc7f425609.jpg" 
-                  alt="Gabriel Alves - Fundador e Autor do Guia" 
-                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                />
+              <div className="relative rounded-2xl overflow-hidden shadow-xl border border-border/60 aspect-[4/5] md:aspect-[3/4] lg:aspect-[4/5] group max-w-md mx-auto lg:ml-auto lg:mr-0 bg-gradient-to-br from-primary via-primary/80 to-secondary flex items-center justify-center">
+                <span
+                  className="text-white font-extrabold opacity-30 select-none"
+                  style={{ fontSize: 'clamp(8rem, 22vw, 14rem)', lineHeight: 1 }}
+                  aria-hidden="true"
+                >
+                  GA
+                </span>
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex items-end p-8 opacity-90 transition-opacity duration-500 group-hover:opacity-100">
                   <div>
                     <p className="text-white font-bold text-2xl mb-1">Gabriel Alves</p>
-                    <p className="text-white/90 font-medium">Fundador & Autor</p>
+                    <p className="text-white/90 font-medium">Fundador &amp; Autor</p>
                   </div>
                 </div>
               </div>
