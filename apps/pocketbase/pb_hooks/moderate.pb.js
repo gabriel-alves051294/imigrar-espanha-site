@@ -28,6 +28,11 @@ onRecordCreateRequest((e) => {
     if (!text) throw new BadRequestError("Conteúdo não pode estar vazio");
     if (text.length > MAX_TEXT_LEN) throw new BadRequestError("Conteúdo excede o limite de " + MAX_TEXT_LEN + " caracteres");
 
+    // KILL-SWITCH: MODERATION_ENABLED=false bypassa OpenAI (uso temp sem creditos)
+    if (($os.getenv("MODERATION_ENABLED") || "true").toLowerCase() === "false") {
+        e.next();
+        return;
+    }
     // Strip caracteres de controle (\x00-\x1F, \x7F) que vazam ao setar secret via CLI
     const key = ($os.getenv("OPENAI_API_KEY") || "").replace(/[\x00-\x1F\x7F]/g, "").trim();
     if (!key) throw new BadRequestError("Moderação indisponível, tente novamente em instantes");
@@ -79,6 +84,11 @@ onRecordCreateRequest((e) => {
     if (!text) throw new BadRequestError("Conteúdo não pode estar vazio");
     if (text.length > MAX_TEXT_LEN) throw new BadRequestError("Conteúdo excede o limite de " + MAX_TEXT_LEN + " caracteres");
 
+    // KILL-SWITCH: MODERATION_ENABLED=false bypassa OpenAI (uso temp sem creditos)
+    if (($os.getenv("MODERATION_ENABLED") || "true").toLowerCase() === "false") {
+        e.next();
+        return;
+    }
     // Strip caracteres de controle (\x00-\x1F, \x7F) que vazam ao setar secret via CLI
     const key = ($os.getenv("OPENAI_API_KEY") || "").replace(/[\x00-\x1F\x7F]/g, "").trim();
     if (!key) throw new BadRequestError("Moderação indisponível, tente novamente em instantes");
@@ -130,6 +140,11 @@ onRecordCreateRequest((e) => {
     if (!text) throw new BadRequestError("Mensagem não pode estar vazia");
     if (text.length > CHAT_MAX_LEN) throw new BadRequestError("Mensagem excede " + CHAT_MAX_LEN + " caracteres");
 
+    // KILL-SWITCH: MODERATION_ENABLED=false bypassa OpenAI (uso temp sem creditos)
+    if (($os.getenv("MODERATION_ENABLED") || "true").toLowerCase() === "false") {
+        e.next();
+        return;
+    }
     // Strip caracteres de controle (\x00-\x1F, \x7F) que vazam ao setar secret via CLI
     const key = ($os.getenv("OPENAI_API_KEY") || "").replace(/[\x00-\x1F\x7F]/g, "").trim();
     if (!key) throw new BadRequestError("Moderação indisponível, tente novamente em instantes");
@@ -181,6 +196,11 @@ onRecordCreateRequest((e) => {
     if (!text) throw new BadRequestError("Comentário não pode estar vazio");
     if (text.length > MAX_TEXT_LEN) throw new BadRequestError("Comentário excede o limite de " + MAX_TEXT_LEN + " caracteres");
 
+    // KILL-SWITCH: MODERATION_ENABLED=false bypassa OpenAI (uso temp sem creditos)
+    if (($os.getenv("MODERATION_ENABLED") || "true").toLowerCase() === "false") {
+        e.next();
+        return;
+    }
     // Strip caracteres de controle (\x00-\x1F, \x7F) que vazam ao setar secret via CLI
     const key = ($os.getenv("OPENAI_API_KEY") || "").replace(/[\x00-\x1F\x7F]/g, "").trim();
     if (!key) throw new BadRequestError("Moderação indisponível, tente novamente em instantes");
