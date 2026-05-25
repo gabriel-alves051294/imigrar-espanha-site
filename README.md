@@ -289,19 +289,7 @@ Running this platform incurs **real recurring costs**: Fly.io compute, persisten
 <td><a href="https://buymeacoffee.com/gabrielalvk">Buy Me a Coffee</a></td>
 <td><a href="https://buymeacoffee.com/gabrielalvk">buymeacoffee.com/gabrielalvk</a></td>
 </tr>
-<tr>
-<td>🟠 <strong>Bitcoin</strong></td>
-<td>On-chain BTC</td>
-<td><code>&lt;ADD_BTC_ADDRESS_HERE&gt;</code></td>
-</tr>
-<tr>
-<td>🔷 <strong>Ethereum</strong></td>
-<td>ERC-20 / EVM-compatible</td>
-<td><code>&lt;ADD_ETH_ADDRESS_HERE&gt;</code></td>
-</tr>
 </table>
-
-> **Replace the crypto placeholders** with your public addresses when you're ready to accept on-chain donations. Use a fresh wallet dedicated to public donations and never paste a private key into the README.
 
 ---
 
@@ -313,7 +301,7 @@ Running this platform incurs **real recurring costs**: Fly.io compute, persisten
 
 **Histórico do projeto:** desenvolvido por **Gabriel Alves Izaias** (Técnico em Informática, entusiasta de engenharia de prompt e IA). Aproximadamente **80% do ecossistema** foi escrito, refinado e coordenado através de **agentes de IA**, demonstrando como conhecimento técnico sólido + IA generativa moderna ergue plataformas robustas em tempo recorde.
 
-**Como apoiar:** PIX `31994960367` (Gabriel Alves Izaias) · [Buy Me a Coffee internacional](https://buymeacoffee.com/gabrielalvk) · BTC/ETH disponíveis na tabela acima.
+**Como apoiar:** PIX `31994960367` (Gabriel Alves Izaias) · [Buy Me a Coffee internacional](https://buymeacoffee.com/gabrielalvk).
 
 **Licença:** proprietária **Source-Available** — leia o arquivo [LICENSE](./LICENSE) na íntegra. Você pode estudar o código, auditar segurança e enviar Pull Requests; **não pode** copiar layouts, fazer engenharia reversa do funil de vendas, sublicenciar ou explorar comercialmente sem autorização prévia por escrito do autor.
 
