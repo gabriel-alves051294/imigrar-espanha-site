@@ -4,7 +4,9 @@
 // porque PB JSVM v0.38 não preserva closure de callbacks.
 
 onRecordCreateRequest((e) => {
-    const max = Number($os.getenv("RL_CHAT_MAX") || 10);
+    // Aumentado pra 60/60s — gamificacao exige permitir muitos posts validos.
+    // Override via env RL_CHAT_MAX se quiser endurecer/relaxar.
+    const max = Number($os.getenv("RL_CHAT_MAX") || 60);
     const win = Number($os.getenv("RL_CHAT_WINDOW") || 60);
     const authorId = e.record.get("author");
     if (authorId) {

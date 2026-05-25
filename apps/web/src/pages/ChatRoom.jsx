@@ -18,11 +18,19 @@ const ChatRoom = () => {
   const [isLoading, setIsLoading] = useState(true);
   const scrollRef = useRef(null);
 
+  // TTL visual — mensagens > 6h somem do chat (clean look). Backend mantem
+  // historico pra preservar pontos ja contabilizados.
+  const TTL_HOURS = 6;
+  const TTL_MS = TTL_HOURS * 60 * 60 * 1000;
+  const isFresh = (createdISO) => (Date.now() - new Date(createdISO).getTime()) < TTL_MS;
+
   useEffect(() => {
     const fetchMessages = async () => {
       try {
+        // Filtro server-side: traz apenas msgs das ultimas 6h pra economizar payload
+        const sinceIso = new Date(Date.now() - TTL_MS).toISOString().replace('T', ' ');
         const records = await pb.collection('chat_messages').getList(1, 50, {
-          filter: `room="${roomName}"`,
+          filter: `room="${roomName}" && created >= "${sinceIso}"`,
           sort: '-created',
           expand: 'author',
           $autoCancel: false
@@ -42,9 +50,22 @@ const ChatRoom = () => {
         const newMessage = await pb.collection('chat_messages').getOne(e.record.id, { expand: 'author', $autoCancel: false });
         setMessages(prev => [...prev, newMessage]);
       }
+      // Remove instantaneamente do DOM se moderacao deletou
+      if (e.action === 'delete') {
+        setMessages(prev => prev.filter(m => m.id !== e.record.id));
+      }
     });
 
-    return () => pb.collection('chat_messages').unsubscribe('*');
+    // Sweep periodico: a cada 60s remove msgs que passaram do TTL local
+    const sweepId = setInterval(() => {
+      setMessages(prev => prev.filter(m => isFresh(m.created)));
+    }, 60 * 1000);
+
+    return () => {
+      pb.collection('chat_messages').unsubscribe('*');
+      clearInterval(sweepId);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [roomName]);
 
   useEffect(() => {

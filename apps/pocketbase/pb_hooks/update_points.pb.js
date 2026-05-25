@@ -1,88 +1,54 @@
 /// <reference path="../pb_data/types.d.ts" />
 //
-// Gamificacao COMIQUICE — incrementa points no profile do autor a cada
-// interacao bem-sucedida. Bonus por tempo de conta (+10/mes) NAO eh
-// persistido aqui — eh computado no frontend somando ao display.
+// Gamificacao COMIQUICE — incrementa pontos no profile do autor.
 //
-// PB JSVM v0.38: handlers 100% inline (sem closure de funcoes externas).
+// CRITICO: usa SQL UPDATE direto pra increment atomico. Caso contrario,
+// 6 mensagens em paralelo causam race condition (todas leem mesmo valor,
+// ultima escrita vence -> +1 ponto em vez de +6).
 //
 // Pontuacao:
 //   chat_messages  +1
 //   blog_comments  +2
-//   replies        +3   (resposta em topico do forum)
-//   posts          +5   (novo topico do forum)
-//   blog_posts     +10  (artigo no blog)
+//   replies        +3
+//   posts          +5
+//   blog_posts     +10
+//
+// IMPORTANTE: nunca reduz pontos. Mensagens ofensivas sao BLOQUEADAS
+// pelo hook moderate ANTES do create -> nao chegam a ganhar ponto.
 
-// Helper inline em cada handler — increment(profileId, delta) precisa
-// ser repetido pra evitar issue de closure. Encapsulado em IIFE pra
-// nao poluir global.
+function bumpPoints(authorId, delta) {
+    if (!authorId || !delta) return;
+    try {
+        $app.db()
+            .newQuery("UPDATE profiles SET points = COALESCE(points, 0) + {:d} WHERE id = {:id}")
+            .bind({ d: delta, id: authorId })
+            .execute();
+    } catch (err) {
+        console.log("[update_points] SQL failed for " + authorId + ": " + err);
+    }
+}
 
 onRecordAfterCreateSuccess((e) => {
-    const profileId = e.record.get("author");
-    if (!profileId) { e.next(); return; }
-    try {
-        const profile = $app.findRecordById("profiles", profileId);
-        const current = profile.get("points") || 0;
-        profile.set("points", current + 1);
-        $app.save(profile);
-    } catch (err) {
-        console.log("[update_points/chat] " + err);
-    }
+    bumpPoints(e.record.get("author"), 1);
     e.next();
 }, "chat_messages");
 
 onRecordAfterCreateSuccess((e) => {
-    const profileId = e.record.get("author");
-    if (!profileId) { e.next(); return; }
-    try {
-        const profile = $app.findRecordById("profiles", profileId);
-        const current = profile.get("points") || 0;
-        profile.set("points", current + 2);
-        $app.save(profile);
-    } catch (err) {
-        console.log("[update_points/blog_comment] " + err);
-    }
+    bumpPoints(e.record.get("author"), 2);
     e.next();
 }, "blog_comments");
 
 onRecordAfterCreateSuccess((e) => {
-    const profileId = e.record.get("author");
-    if (!profileId) { e.next(); return; }
-    try {
-        const profile = $app.findRecordById("profiles", profileId);
-        const current = profile.get("points") || 0;
-        profile.set("points", current + 3);
-        $app.save(profile);
-    } catch (err) {
-        console.log("[update_points/reply] " + err);
-    }
+    bumpPoints(e.record.get("author"), 3);
     e.next();
 }, "replies");
 
 onRecordAfterCreateSuccess((e) => {
-    const profileId = e.record.get("author");
-    if (!profileId) { e.next(); return; }
-    try {
-        const profile = $app.findRecordById("profiles", profileId);
-        const current = profile.get("points") || 0;
-        profile.set("points", current + 5);
-        $app.save(profile);
-    } catch (err) {
-        console.log("[update_points/post] " + err);
-    }
+    bumpPoints(e.record.get("author"), 5);
     e.next();
 }, "posts");
 
 onRecordAfterCreateSuccess((e) => {
-    const profileId = e.record.get("author");
-    if (!profileId) { e.next(); return; }
-    try {
-        const profile = $app.findRecordById("profiles", profileId);
-        const current = profile.get("points") || 0;
-        profile.set("points", current + 10);
-        $app.save(profile);
-    } catch (err) {
-        console.log("[update_points/blog_post] " + err);
-    }
+    bumpPoints(e.record.get("author"), 10);
     e.next();
 }, "blog_posts");
