@@ -28,7 +28,7 @@ onRecordCreateRequest((e) => {
     if (!text) throw new BadRequestError("Conteúdo não pode estar vazio");
     if (text.length > MAX_TEXT_LEN) throw new BadRequestError("Conteúdo excede o limite de " + MAX_TEXT_LEN + " caracteres");
 
-    const key = $os.getenv("OPENAI_API_KEY");
+    const key = ($os.getenv("OPENAI_API_KEY") || "").trim();
     if (!key) throw new BadRequestError("Moderação indisponível, tente novamente em instantes");
 
     let resp;
@@ -78,7 +78,7 @@ onRecordCreateRequest((e) => {
     if (!text) throw new BadRequestError("Conteúdo não pode estar vazio");
     if (text.length > MAX_TEXT_LEN) throw new BadRequestError("Conteúdo excede o limite de " + MAX_TEXT_LEN + " caracteres");
 
-    const key = $os.getenv("OPENAI_API_KEY");
+    const key = ($os.getenv("OPENAI_API_KEY") || "").trim();
     if (!key) throw new BadRequestError("Moderação indisponível, tente novamente em instantes");
 
     let resp;
@@ -128,7 +128,7 @@ onRecordCreateRequest((e) => {
     if (!text) throw new BadRequestError("Mensagem não pode estar vazia");
     if (text.length > CHAT_MAX_LEN) throw new BadRequestError("Mensagem excede " + CHAT_MAX_LEN + " caracteres");
 
-    const key = $os.getenv("OPENAI_API_KEY");
+    const key = ($os.getenv("OPENAI_API_KEY") || "").trim();
     if (!key) throw new BadRequestError("Moderação indisponível, tente novamente em instantes");
 
     let resp;
@@ -178,7 +178,7 @@ onRecordCreateRequest((e) => {
     if (!text) throw new BadRequestError("Comentário não pode estar vazio");
     if (text.length > MAX_TEXT_LEN) throw new BadRequestError("Comentário excede o limite de " + MAX_TEXT_LEN + " caracteres");
 
-    const key = $os.getenv("OPENAI_API_KEY");
+    const key = ($os.getenv("OPENAI_API_KEY") || "").trim();
     if (!key) throw new BadRequestError("Moderação indisponível, tente novamente em instantes");
 
     let resp;

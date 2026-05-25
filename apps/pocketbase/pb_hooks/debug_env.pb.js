@@ -3,14 +3,25 @@
 // REMOVER apos validar.
 
 routerAdd("GET", "/debug/env", (e) => {
-    const key = $os.getenv("OPENAI_API_KEY");
+    const key = $os.getenv("OPENAI_API_KEY") || "";
+    const trimmed = key.trim();
+    // Mapeia byte codes pra identificar caracteres invalidos
+    const lastBytes = [];
+    for (let i = Math.max(0, key.length - 5); i < key.length; i++) {
+        lastBytes.push({ idx: i, code: key.charCodeAt(i) });
+    }
+    const firstBytes = [];
+    for (let i = 0; i < Math.min(5, key.length); i++) {
+        firstBytes.push({ idx: i, code: key.charCodeAt(i) });
+    }
     const out = {
         has_openai_key: !!key,
-        openai_key_length: key ? key.length : 0,
-        openai_key_prefix: key ? key.substring(0, 7) : null,
+        raw_length: key.length,
+        trimmed_length: trimmed.length,
+        prefix: key.substring(0, 7),
+        first_bytes: firstBytes,
+        last_bytes: lastBytes,
         has_pb_enc_key: !!$os.getenv("PB_ENCRYPTION_KEY"),
-        has_pb_su_email: !!$os.getenv("PB_SUPERUSER_EMAIL"),
-        node_env: $os.getenv("NODE_ENV") || null,
         port: $os.getenv("PORT") || null,
     };
     return e.json(200, out);
@@ -18,7 +29,7 @@ routerAdd("GET", "/debug/env", (e) => {
 
 // Testa conectividade real com OpenAI
 routerAdd("GET", "/debug/openai-ping", (e) => {
-    const key = $os.getenv("OPENAI_API_KEY");
+    const key = ($os.getenv("OPENAI_API_KEY") || "").trim();
     if (!key) return e.json(500, { error: "OPENAI_API_KEY not set" });
     try {
         const resp = $http.send({
