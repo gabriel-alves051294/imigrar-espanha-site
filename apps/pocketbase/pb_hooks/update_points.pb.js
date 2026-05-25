@@ -2,9 +2,11 @@
 //
 // Gamificacao COMIQUICE — incrementa pontos no profile do autor.
 //
-// CRITICO: usa SQL UPDATE direto pra increment atomico. Caso contrario,
-// 6 mensagens em paralelo causam race condition (todas leem mesmo valor,
-// ultima escrita vence -> +1 ponto em vez de +6).
+// CRITICO 1: SQL UPDATE direto pra increment atomico (evita race condition
+//            em saves paralelos).
+// CRITICO 2: PB JSVM v0.38 NAO preserva escopo entre callbacks. Cada
+//            handler precisa ser 100% inline (zero referencia a funcao
+//            externa). Sem helpers compartilhados!
 //
 // Pontuacao:
 //   chat_messages  +1
@@ -13,42 +15,70 @@
 //   posts          +5
 //   blog_posts     +10
 //
-// IMPORTANTE: nunca reduz pontos. Mensagens ofensivas sao BLOQUEADAS
-// pelo hook moderate ANTES do create -> nao chegam a ganhar ponto.
-
-function bumpPoints(authorId, delta) {
-    if (!authorId || !delta) return;
-    try {
-        $app.db()
-            .newQuery("UPDATE profiles SET points = COALESCE(points, 0) + {:d} WHERE id = {:id}")
-            .bind({ d: delta, id: authorId })
-            .execute();
-    } catch (err) {
-        console.log("[update_points] SQL failed for " + authorId + ": " + err);
-    }
-}
+// Mensagens ofensivas sao BLOQUEADAS pelo hook moderate ANTES do create
+// -> nao chegam a ganhar ponto. Pontos nunca sao reduzidos.
 
 onRecordAfterCreateSuccess((e) => {
-    bumpPoints(e.record.get("author"), 1);
+    const id = e.record.get("author");
+    if (id) {
+        try {
+            $app.db()
+                .newQuery("UPDATE profiles SET points = COALESCE(points, 0) + 1 WHERE id = {:id}")
+                .bind({ id: id })
+                .execute();
+        } catch (err) { console.log("[points/chat] " + err); }
+    }
     e.next();
 }, "chat_messages");
 
 onRecordAfterCreateSuccess((e) => {
-    bumpPoints(e.record.get("author"), 2);
+    const id = e.record.get("author");
+    if (id) {
+        try {
+            $app.db()
+                .newQuery("UPDATE profiles SET points = COALESCE(points, 0) + 2 WHERE id = {:id}")
+                .bind({ id: id })
+                .execute();
+        } catch (err) { console.log("[points/blog_comment] " + err); }
+    }
     e.next();
 }, "blog_comments");
 
 onRecordAfterCreateSuccess((e) => {
-    bumpPoints(e.record.get("author"), 3);
+    const id = e.record.get("author");
+    if (id) {
+        try {
+            $app.db()
+                .newQuery("UPDATE profiles SET points = COALESCE(points, 0) + 3 WHERE id = {:id}")
+                .bind({ id: id })
+                .execute();
+        } catch (err) { console.log("[points/reply] " + err); }
+    }
     e.next();
 }, "replies");
 
 onRecordAfterCreateSuccess((e) => {
-    bumpPoints(e.record.get("author"), 5);
+    const id = e.record.get("author");
+    if (id) {
+        try {
+            $app.db()
+                .newQuery("UPDATE profiles SET points = COALESCE(points, 0) + 5 WHERE id = {:id}")
+                .bind({ id: id })
+                .execute();
+        } catch (err) { console.log("[points/post] " + err); }
+    }
     e.next();
 }, "posts");
 
 onRecordAfterCreateSuccess((e) => {
-    bumpPoints(e.record.get("author"), 10);
+    const id = e.record.get("author");
+    if (id) {
+        try {
+            $app.db()
+                .newQuery("UPDATE profiles SET points = COALESCE(points, 0) + 10 WHERE id = {:id}")
+                .bind({ id: id })
+                .execute();
+        } catch (err) { console.log("[points/blog_post] " + err); }
+    }
     e.next();
 }, "blog_posts");
