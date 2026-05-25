@@ -30,6 +30,30 @@ build/
 !**/.env.example
 
 # ──────────────────────────────────────────────
+# OAuth / API credentials (NUNCA commitar)
+# ──────────────────────────────────────────────
+# Google OAuth client secrets baixados do Cloud Console
+client_secret*.json
+client_secret*.apps.googleusercontent.com.json
+**/client_secret*.json
+# Credenciais genéricas e chaves
+*credentials*.json
+!**/package.json
+!**/tsconfig*.json
+!**/vercel.json
+*.pem
+*.key
+*.p12
+*.pfx
+secrets/
+.secrets/
+
+# ──────────────────────────────────────────────
+# Lockfiles do Git (não devem ser commitados nunca)
+# ──────────────────────────────────────────────
+.git/index.lock
+
+# ──────────────────────────────────────────────
 # PocketBase
 # ──────────────────────────────────────────────
 # Dados persistentes do PB (volume mount no Fly)
