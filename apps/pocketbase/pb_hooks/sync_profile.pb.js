@@ -4,70 +4,68 @@
 // "profiles" collection with the SAME id so that posts/replies/chat_messages
 // FK to profile.id continue to work using the user's token id.
 //
-// PocketBase JSVM v0.23+ APIs used:
-//   onRecordAfterCreateSuccess, $app.findCollectionByNameOrId, new Record, $app.save
-//
-// NOTA: o nome `onRecordAfterCreateRequest` é da API JSVM antiga (≤0.22)
-// e foi removido em 0.23+. A função correta agora é `onRecordAfterCreateSuccess`.
+// Mudanças vs versão anterior:
+//   1. IIFE wrapper para consistência com moderate/rate_limit (escopo JSVM).
+//   2. FAIL-LOUD no $app.save: se profile não puder ser criado, lança
+//      Error pra que o user.create também falhe (evita user órfão sem profile).
+//      Caso contrário, o user logaria mas todos os creates dele (chat, posts,
+//      replies) falhariam silenciosamente com FK violation.
 
-onRecordAfterCreateSuccess((e) => {
-    const user = e.record;
+(function () {
+    onRecordAfterCreateSuccess((e) => {
+        const user = e.record;
 
-    // Skip if a profile already exists (idempotent: re-running migrations / reseeds).
-    try {
-        const existing = $app.findRecordById("profiles", user.id);
-        if (existing) {
-            e.next();
-            return;
+        // Idempotente: se já existe, segue.
+        try {
+            const existing = $app.findRecordById("profiles", user.id);
+            if (existing) {
+                e.next();
+                return;
+            }
+        } catch (err) {
+            // Not found → criar abaixo.
         }
-    } catch (err) {
-        // Not found → proceed to create.
-    }
 
-    let profilesCollection;
-    try {
-        profilesCollection = $app.findCollectionByNameOrId("profiles");
-    } catch (err) {
-        console.log("[sync_profile] 'profiles' collection not found, skipping");
+        let profilesCollection;
+        try {
+            profilesCollection = $app.findCollectionByNameOrId("profiles");
+        } catch (err) {
+            console.log("[sync_profile] 'profiles' collection not found — abortando user create");
+            throw new Error("Profiles collection missing — server misconfigured");
+        }
+
+        const profile = new Record(profilesCollection);
+        profile.set("id", user.id);
+
+        const oauthName = user.get("name");
+        const email = user.get("email") || "";
+        const fallback = email ? email.split("@")[0] : ("user_" + user.id.substr(0, 6));
+        profile.set("name", oauthName || fallback);
+        profile.set("bio", "");
+        profile.set("toxic_strikes", 0);
+        profile.set("is_banned", false);
+
+        try {
+            $app.save(profile);
+            console.log("[sync_profile] created profile for user " + user.id + " (" + email + ")");
+        } catch (err) {
+            console.log("[sync_profile] FATAL: failed to create profile for user " + user.id + ": " + err);
+            // FAIL-LOUD: propaga o erro pra que user.create falhe também.
+            // Melhor falhar no signup que ter user órfão sem profile.
+            throw err;
+        }
+
         e.next();
-        return;
-    }
+    }, "users");
 
-    const profile = new Record(profilesCollection);
-
-    // Use the same id as the user so relations align automatically.
-    profile.set("id", user.id);
-
-    // Best-effort: pull a display name from oauth meta or fall back to email prefix.
-    const oauthName = user.get("name");
-    const email = user.get("email") || "";
-    const fallback = email ? email.split("@")[0] : ("user_" + user.id.substr(0, 6));
-    profile.set("name", oauthName || fallback);
-
-    profile.set("bio", "");
-    profile.set("toxic_strikes", 0);
-    profile.set("is_banned", false);
-
-    try {
-        $app.save(profile);
-    } catch (err) {
-        console.log("[sync_profile] failed to create profile for user " + user.id + ": " + err);
-    }
-
-    e.next();
-}, "users");
-
-// ────────────────────────────────────────────────────────────────────
-// On user delete → cascade-delete the matching profile to keep things tidy.
-// PocketBase doesn't enforce FK from profiles→users since profiles is a
-// standalone base collection, so we delete here explicitly.
-// ────────────────────────────────────────────────────────────────────
-onRecordAfterDeleteSuccess((e) => {
-    try {
-        const profile = $app.findRecordById("profiles", e.record.id);
-        if (profile) $app.delete(profile);
-    } catch (err) {
-        // No profile to delete — fine.
-    }
-    e.next();
-}, "users");
+    // Cascade delete profile quando user é removido.
+    onRecordAfterDeleteSuccess((e) => {
+        try {
+            const profile = $app.findRecordById("profiles", e.record.id);
+            if (profile) $app.delete(profile);
+        } catch (err) {
+            // No profile to delete — fine.
+        }
+        e.next();
+    }, "users");
+})();
