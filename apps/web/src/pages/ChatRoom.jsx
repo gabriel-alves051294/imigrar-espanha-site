@@ -5,8 +5,10 @@ import { useParams } from 'react-router-dom';
 import pb from '@/lib/pocketbase.js';
 import { useAuth } from '@/contexts/AuthContext.jsx';
 import ChatInput from '@/components/ChatInput.jsx';
-import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Skeleton } from '@/components/ui/skeleton';
+import RankedAvatar from '@/components/RankedAvatar.jsx';
+import RankBadge from '@/components/RankBadge.jsx';
+import { computeRank } from '@/lib/rank.js';
 
 const ChatRoom = () => {
   const { slug } = useParams();
@@ -71,14 +73,34 @@ const ChatRoom = () => {
           ) : messages.length > 0 ? (
             messages.map((msg) => {
               const isMe = session?.id === msg.author;
+              const author = msg.expand?.author;
+              const rank = computeRank(author);
+              // Disparidade visual da bolha por tier
+              const isGhost = rank.tier === 'imigrante';
+              const isRoyal = rank.tier === 'cidadao';
+              const nameClass = isGhost
+                ? 'text-slate-400 italic'
+                : isRoyal
+                ? 'text-yellow-600 dark:text-yellow-400 font-semibold drop-shadow-[0_0_4px_rgba(234,179,8,0.5)]'
+                : 'text-muted-foreground';
+              const bubbleClass = isMe
+                ? 'bg-primary text-primary-foreground rounded-tr-sm'
+                : isGhost
+                ? 'bg-slate-100 text-slate-500 dark:bg-slate-800/40 dark:text-slate-400 rounded-tl-sm'
+                : isRoyal
+                ? 'bg-gradient-to-br from-yellow-100 to-amber-50 dark:from-yellow-900/30 dark:to-amber-900/20 text-foreground border border-yellow-400/40 rounded-tl-sm'
+                : 'bg-muted text-foreground rounded-tl-sm';
               return (
                 <div key={msg.id} className={`flex gap-3 max-w-[80%] ${isMe ? 'self-end flex-row-reverse' : 'self-start'}`}>
-                  <Avatar className="h-8 w-8 shrink-0 mt-1">
-                    <AvatarFallback className="text-[10px]">{msg.expand?.author?.name?.substring(0, 2).toUpperCase() || 'U'}</AvatarFallback>
-                  </Avatar>
+                  <div className="mt-1">
+                    <RankedAvatar profile={author} size={32} />
+                  </div>
                   <div className={`flex flex-col ${isMe ? 'items-end' : 'items-start'}`}>
-                    <span className="text-xs text-muted-foreground mb-1 ml-1">{msg.expand?.author?.name || 'Usuário'}</span>
-                    <div className={`px-4 py-2 rounded-2xl ${isMe ? 'bg-primary text-primary-foreground rounded-tr-sm' : 'bg-muted text-foreground rounded-tl-sm'}`}>
+                    <div className={`flex items-center gap-1.5 mb-1 ml-1 ${isMe ? 'flex-row-reverse' : ''}`}>
+                      <span className={`text-xs ${nameClass}`}>{author?.name || 'Usuário'}</span>
+                      {author && <RankBadge profile={author} size="xs" showLabel={false} />}
+                    </div>
+                    <div className={`px-4 py-2 rounded-2xl ${bubbleClass}`}>
                       {msg.content}
                     </div>
                   </div>

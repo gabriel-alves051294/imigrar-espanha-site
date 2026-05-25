@@ -26,6 +26,7 @@ import BlogPostPage from './pages/BlogPostPage.jsx';
 import BlogEditorPage from './pages/BlogEditorPage.jsx';
 import CommunityRulesPage from './pages/CommunityRulesPage.jsx';
 import AuthCallback from './pages/AuthCallback.jsx';
+import ProfilePage from './pages/ProfilePage.jsx';
 import RequireAuth from './components/RequireAuth.jsx';
 
 function App() {
@@ -56,6 +57,7 @@ function App() {
             <Route element={<RequireAuth />}>
               <Route path="/comunidade/chat/:slug?" element={<ChatRoom />} />
               <Route path="/blog/novo" element={<BlogEditorPage />} />
+              <Route path="/perfil" element={<ProfilePage />} />
             </Route>
 
             {/* Blog Routes — públicas para leitura */}

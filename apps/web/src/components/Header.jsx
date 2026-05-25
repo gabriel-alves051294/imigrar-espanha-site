@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, LogOut, Users } from 'lucide-react';
+import { Menu, LogOut, Users, Trophy } from 'lucide-react';
 import { Sheet, SheetContent, SheetTrigger, SheetTitle } from '@/components/ui/sheet';
 import { Button } from '@/components/ui/button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuSeparator } from '@/components/ui/dropdown-menu';
@@ -100,6 +100,12 @@ const Header = () => {
                         <Link to="/comunidade">
                           <Users className="mr-2 h-4 w-4" />
                           <span>Comunidade</span>
+                        </Link>
+                      </DropdownMenuItem>
+                      <DropdownMenuItem asChild className="cursor-pointer">
+                        <Link to="/perfil">
+                          <Trophy className="mr-2 h-4 w-4" />
+                          <span>Meu Ranque</span>
                         </Link>
                       </DropdownMenuItem>
                       <DropdownMenuItem className="cursor-pointer text-destructive focus:text-destructive" onClick={() => signOut()}>

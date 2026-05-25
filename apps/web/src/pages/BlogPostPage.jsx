@@ -4,10 +4,11 @@ import { Helmet } from 'react-helmet';
 import { useParams, Link } from 'react-router-dom';
 import pb from '@/lib/pocketbase.js';
 import { Skeleton } from '@/components/ui/skeleton';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { ChevronLeft, Calendar } from 'lucide-react';
 import HotmartCTAWidget from '@/components/HotmartCTAWidget.jsx';
 import AdSlot from '@/components/AdSlot.jsx';
+import RankedAvatar from '@/components/RankedAvatar.jsx';
+import RankBadge from '@/components/RankBadge.jsx';
 
 const BlogPostPage = () => {
   const { slug } = useParams();
@@ -79,12 +80,16 @@ const BlogPostPage = () => {
                 {post.title}
               </h1>
               <div className="flex items-center gap-4 text-muted-foreground border-b border-border/50 pb-6">
-                <Avatar className="h-10 w-10">
-                  <AvatarImage src={post.expand?.author?.avatar ? pb.files.getUrl(post.expand.author, post.expand.author.avatar) : ''} />
-                  <AvatarFallback>{post.expand?.author?.name?.charAt(0) || 'A'}</AvatarFallback>
-                </Avatar>
+                <RankedAvatar
+                  profile={post.expand?.author}
+                  src={post.expand?.author?.avatar ? pb.files.getUrl(post.expand.author, post.expand.author.avatar) : ''}
+                  size={40}
+                />
                 <div>
-                  <div className="font-medium text-foreground">{post.expand?.author?.name || 'Equipe Editorial'}</div>
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <span className="font-medium text-foreground">{post.expand?.author?.name || 'Equipe Editorial'}</span>
+                    {post.expand?.author && <RankBadge profile={post.expand.author} size="sm" />}
+                  </div>
                   <div className="text-sm flex items-center gap-1 mt-0.5">
                     <Calendar className="h-3 w-3" />
                     {new Date(post.created).toLocaleDateString('pt-BR', { day: 'numeric', month: 'long', year: 'numeric' })}

@@ -5,11 +5,12 @@ import { useParams, Link } from 'react-router-dom';
 import pb from '@/lib/pocketbase.js';
 import { useAuth } from '@/contexts/AuthContext.jsx';
 import { Skeleton } from '@/components/ui/skeleton';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Clock, ChevronLeft } from 'lucide-react';
 import HotmartCTAWidget from '@/components/HotmartCTAWidget.jsx';
 import AdSlot from '@/components/AdSlot.jsx';
 import ReplyForm from '@/components/ReplyForm.jsx';
+import RankedAvatar from '@/components/RankedAvatar.jsx';
+import RankBadge from '@/components/RankBadge.jsx';
 
 const ThreadPage = () => {
   const { id } = useParams();
@@ -99,13 +100,17 @@ const ThreadPage = () => {
               <h1 className="text-2xl md:text-3xl font-bold mb-6">{thread.title}</h1>
               
               <div className="flex items-center gap-4 mb-8 border-b pb-6">
-                <Avatar className="h-12 w-12 rounded-xl">
-                  <AvatarImage src={thread.expand?.author?.avatar ? pb.files.getUrl(thread.expand.author, thread.expand.author.avatar) : ''} />
-                  <AvatarFallback className="rounded-xl">{thread.expand?.author?.name?.charAt(0) || 'U'}</AvatarFallback>
-                </Avatar>
+                <RankedAvatar
+                  profile={thread.expand?.author}
+                  src={thread.expand?.author?.avatar ? pb.files.getUrl(thread.expand.author, thread.expand.author.avatar) : ''}
+                  size={48}
+                />
                 <div>
-                  <div className="font-semibold">{thread.expand?.author?.name || 'Usuário'}</div>
-                  <div className="flex items-center text-xs text-muted-foreground gap-2">
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <span className="font-semibold">{thread.expand?.author?.name || 'Usuário'}</span>
+                    {thread.expand?.author && <RankBadge profile={thread.expand.author} size="sm" />}
+                  </div>
+                  <div className="flex items-center text-xs text-muted-foreground gap-2 mt-1">
                     <Clock className="h-3 w-3" />
                     {new Date(thread.created).toLocaleString('pt-BR')}
                   </div>
@@ -132,12 +137,17 @@ const ThreadPage = () => {
               {replies.map((reply) => (
                 <div key={reply.id} className="bg-[hsl(var(--forum-card))] rounded-xl border p-6">
                   <div className="flex items-center gap-3 mb-4">
-                    <Avatar className="h-8 w-8 rounded-lg">
-                      <AvatarFallback className="rounded-lg text-xs">{reply.expand?.author?.name?.charAt(0) || 'U'}</AvatarFallback>
-                    </Avatar>
+                    <RankedAvatar
+                      profile={reply.expand?.author}
+                      src={reply.expand?.author?.avatar ? pb.files.getUrl(reply.expand.author, reply.expand.author.avatar) : ''}
+                      size={32}
+                    />
                     <div>
-                      <div className="font-medium text-sm">{reply.expand?.author?.name || 'Usuário'}</div>
-                      <div className="text-xs text-muted-foreground">
+                      <div className="flex items-center gap-1.5 flex-wrap">
+                        <span className="font-medium text-sm">{reply.expand?.author?.name || 'Usuário'}</span>
+                        {reply.expand?.author && <RankBadge profile={reply.expand.author} size="xs" />}
+                      </div>
+                      <div className="text-xs text-muted-foreground mt-0.5">
                         {new Date(reply.created).toLocaleString('pt-BR')}
                       </div>
                     </div>

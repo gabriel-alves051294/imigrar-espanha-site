@@ -10,6 +10,7 @@ import { MessageSquarePlus, Clock, MessageCircle } from 'lucide-react';
 import HotmartCTAWidget from '@/components/HotmartCTAWidget.jsx';
 import AdSlot from '@/components/AdSlot.jsx';
 import ThreadForm from '@/components/ThreadForm.jsx';
+import RankBadge from '@/components/RankBadge.jsx';
 
 const ForumPage = () => {
   const { session } = useAuth();
@@ -115,7 +116,10 @@ const ForumPage = () => {
                                 {new Date(thread.created).toLocaleDateString('pt-BR')}
                               </span>
                               <span>•</span>
-                              <span>{thread.expand?.author?.name || 'Usuário'}</span>
+                              <span className="flex items-center gap-1.5">
+                                {thread.expand?.author?.name || 'Usuário'}
+                                {thread.expand?.author && <RankBadge profile={thread.expand.author} size="xs" showLabel={false} />}
+                              </span>
                               <span>•</span>
                               <span className="px-2 py-0.5 rounded text-xs bg-muted">
                                 {thread.expand?.category?.name}
