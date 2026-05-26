@@ -26,7 +26,7 @@ const Header = () => {
   }, []);
 
   const navLinks = [
-    { name: 'Home', href: '/' },
+    { name: 'Início', href: '/' },
     { name: 'Sobre Nós', href: '/sobre' },
     { name: 'Comunidade', href: '/comunidade' },
     { name: 'Afiliados', href: '/afiliados' },

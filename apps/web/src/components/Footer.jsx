@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Mail, MapPin, Instagram, Facebook, Linkedin } from 'lucide-react';
+import { Mail, MapPin } from 'lucide-react';
 
 const Footer = () => {
   return (
@@ -17,17 +17,6 @@ const Footer = () => {
             <p className="text-sm text-primary-foreground/80 leading-relaxed">
               O guia definitivo e atualizado para sua imigração legal via FP de Grado Superior. Transforme seu sonho europeu em realidade com segurança.
             </p>
-            <div className="flex items-center gap-4 pt-2">
-              <a href="#" className="text-primary-foreground/60 hover:text-white transition-colors focus-visible:outline-white rounded-sm" aria-label="Instagram">
-                <Instagram className="h-5 w-5" />
-              </a>
-              <a href="#" className="text-primary-foreground/60 hover:text-white transition-colors focus-visible:outline-white rounded-sm" aria-label="Facebook">
-                <Facebook className="h-5 w-5" />
-              </a>
-              <a href="#" className="text-primary-foreground/60 hover:text-white transition-colors focus-visible:outline-white rounded-sm" aria-label="LinkedIn">
-                <Linkedin className="h-5 w-5" />
-              </a>
-            </div>
           </div>
 
           {/* Navegação */}
@@ -70,11 +59,6 @@ const Footer = () => {
                 <Link to="/regras-comunidade" className="text-sm text-primary-foreground/80 hover:text-white transition-colors focus-visible:outline-white rounded-sm">
                   Regras da Comunidade
                 </Link>
-              </li>
-              <li className="pt-2">
-                <span className="text-sm text-primary-foreground/60 font-mono">
-                  CNPJ: [Seu CNPJ aqui]
-                </span>
               </li>
             </ul>
           </div>
