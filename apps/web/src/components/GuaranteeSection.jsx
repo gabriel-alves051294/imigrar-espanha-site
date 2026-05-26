@@ -63,8 +63,8 @@ const GuaranteeSection = () => {
                 />
                 
                 <div className="text-center relative z-10">
-                  <p className="font-bold text-2xl text-foreground mb-1">98%</p>
-                  <p className="text-sm text-muted-foreground uppercase tracking-wider font-medium">Taxa de Satisfação</p>
+                  <p className="font-bold text-2xl text-foreground mb-1">100%</p>
+                  <p className="text-sm text-muted-foreground uppercase tracking-wider font-medium">Reembolso em 30 dias</p>
                 </div>
               </div>
             </div>

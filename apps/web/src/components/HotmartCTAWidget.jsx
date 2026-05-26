@@ -44,7 +44,7 @@ const HotmartCTAWidget = () => {
           asChild
         >
           <a href={hotmartLink} target="_blank" rel="noopener noreferrer">
-            Comprar Guia
+            Quero meu guia · R$67
           </a>
         </Button>
       </CardContent>

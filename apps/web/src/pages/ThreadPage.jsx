@@ -5,7 +5,7 @@ import { useParams, Link } from 'react-router-dom';
 import pb from '@/lib/pocketbase.js';
 import { useAuth } from '@/contexts/AuthContext.jsx';
 import { Skeleton } from '@/components/ui/skeleton';
-import { Clock, ChevronLeft, Pencil } from 'lucide-react';
+import { Clock, ChevronLeft, Pencil, MapPin } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import HotmartCTAWidget from '@/components/HotmartCTAWidget.jsx';
 import AdSlot from '@/components/AdSlot.jsx';
@@ -67,9 +67,28 @@ const ThreadPage = () => {
 
   if (!thread) {
     return (
-      <div className="container py-20 text-center">
-        <h2>Tópico não encontrado</h2>
-        <Link to="/comunidade" className="text-primary hover:underline mt-4 inline-block">Voltar</Link>
+      <div className="container max-w-xl py-24 text-center">
+        <div className="inline-flex items-center justify-center h-16 w-16 rounded-full bg-muted mb-6">
+          <MapPin className="h-8 w-8 text-muted-foreground" />
+        </div>
+        <h2 className="text-2xl font-semibold mb-3">Esse tópico não existe mais</h2>
+        <p className="text-muted-foreground mb-6">
+          Ele pode ter sido removido pelo autor ou nunca existiu. Não tem problema — siga explorando:
+        </p>
+        <div className="flex flex-col sm:flex-row gap-3 justify-center">
+          <Link
+            to="/comunidade"
+            className="inline-flex items-center justify-center px-5 py-2.5 rounded-lg bg-primary text-primary-foreground font-medium hover:bg-primary/90 transition-colors"
+          >
+            Voltar à comunidade
+          </Link>
+          <Link
+            to="/comunidade/c/todas"
+            className="inline-flex items-center justify-center px-5 py-2.5 rounded-lg border border-border text-foreground hover:bg-muted transition-colors"
+          >
+            Ver tópicos recentes
+          </Link>
+        </div>
       </div>
     );
   }

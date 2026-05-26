@@ -45,13 +45,15 @@ export default function MobileStickyBar() {
           <div className="flex items-center justify-between gap-4">
             <div className="flex flex-col">
               <span className="font-bold text-lg leading-none">R$ 67</span>
-              <span className="text-xs text-muted-foreground font-medium">Acesso imediato</span>
+              <span className="text-xs text-muted-foreground font-medium">Acesso em segundos</span>
             </div>
-            <a 
-              href="#oferta" 
+            <a
+              href="https://pay.hotmart.com/E105769769S?checkoutMode=10"
+              target="_blank"
+              rel="noopener noreferrer"
               className="bg-secondary text-secondary-foreground hover:bg-secondary/90 px-6 py-3 rounded-lg font-bold transition-transform active:scale-95 shadow-md flex-1 text-center whitespace-nowrap"
             >
-              Comprar agora
+              Quero meu guia
             </a>
           </div>
         </motion.div>

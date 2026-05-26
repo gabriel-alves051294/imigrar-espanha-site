@@ -19,23 +19,35 @@ import { toast } from 'sonner';
 const ContactPage = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  // O handler antigo apenas gravava em localStorage e mostrava toast de sucesso —
+  // ou seja, NENHUMA mensagem chegava ao contato@imigrarparaespanha.com.br.
+  // Enquanto não há backend de envio (ex: rota PocketBase + SMTP), usamos mailto
+  // pré-preenchido. Garante que toda submissão vire um e-mail real.
   const handleSubmit = (e) => {
     e.preventDefault();
     setIsSubmitting(true);
-    
-    // Simulate API call and save to localStorage
-    setTimeout(() => {
-      const formData = new FormData(e.target);
-      const data = Object.fromEntries(formData.entries());
-      
-      const submissions = JSON.parse(localStorage.getItem('contactSubmissions') || '[]');
-      submissions.push({ ...data, date: new Date().toISOString() });
-      localStorage.setItem('contactSubmissions', JSON.stringify(submissions));
 
-      toast.success('Mensagem enviada com sucesso! Responderemos em até 24 horas.');
-      setIsSubmitting(false);
-      e.target.reset();
-    }, 1000);
+    const formData = new FormData(e.target);
+    const nome = (formData.get('nome') || '').toString().trim();
+    const email = (formData.get('email') || '').toString().trim();
+    const assunto = (formData.get('assunto') || 'Dúvidas').toString();
+    const mensagem = (formData.get('mensagem') || '').toString().trim();
+
+    const subject = encodeURIComponent(`[Site] ${assunto} — ${nome}`);
+    const body = encodeURIComponent(
+      `Nome: ${nome}\nE-mail: ${email}\nAssunto: ${assunto}\n\n${mensagem}\n\n— Enviado pelo formulário em imigrarparaespanha.com.br/contato`
+    );
+
+    // Backup local (não substitui email — apenas histórico defensivo do usuário).
+    try {
+      const submissions = JSON.parse(localStorage.getItem('contactSubmissions') || '[]');
+      submissions.push({ nome, email, assunto, mensagem, date: new Date().toISOString() });
+      localStorage.setItem('contactSubmissions', JSON.stringify(submissions));
+    } catch (_) { /* storage indisponível */ }
+
+    window.location.href = `mailto:contato@imigrarparaespanha.com.br?subject=${subject}&body=${body}`;
+    toast.success('Seu app de e-mail vai abrir. Confirme o envio e respondo em até 24 horas.');
+    setIsSubmitting(false);
   };
 
   return (

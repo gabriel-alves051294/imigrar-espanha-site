@@ -20,7 +20,7 @@ const AboutPage = () => {
         <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1543783207-11ce28a1f1ce?q=80&w=2000&auto=format&fit=crop')] bg-cover bg-center opacity-10 mix-blend-overlay"></div>
         <div className="container relative z-10 text-center">
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={false}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
           >
@@ -107,11 +107,21 @@ const AboutPage = () => {
               className="order-1 lg:order-2 lg:sticky lg:top-24"
             >
               <div className="relative rounded-2xl overflow-hidden shadow-xl border border-border/60 aspect-[4/5] md:aspect-[3/4] lg:aspect-[4/5] group max-w-md mx-auto lg:ml-auto lg:mr-0">
-                <img
-                  src="/perfil-gabriel.png"
-                  alt="Gabriel Alves - Fundador & Autor"
-                  className="w-full h-full object-cover object-center"
-                />
+                {/* <picture> com WebP (130KB) + fallback PNG (1MB).
+                    Antes: PNG único de 6.9MB matando LCP/Core Web Vitals
+                    exatamente no momento de conexão emocional da história. */}
+                <picture>
+                  <source srcSet="/perfil-gabriel.webp" type="image/webp" />
+                  <img
+                    src="/perfil-gabriel.png"
+                    alt="Gabriel Alves - Fundador & Autor"
+                    width="1200"
+                    height="1600"
+                    loading="lazy"
+                    decoding="async"
+                    className="w-full h-full object-cover object-center"
+                  />
+                </picture>
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex items-end p-8 opacity-90 transition-opacity duration-500 group-hover:opacity-100">
                   <div>
                     <p className="text-white font-bold text-2xl mb-1">Gabriel Alves</p>

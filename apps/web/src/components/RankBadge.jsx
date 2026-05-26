@@ -46,10 +46,14 @@ const RankBadge = ({ profile, size = 'sm', showLabel = true, className = '' }) =
   return (
     <span
       className={`inline-flex items-center rounded-full font-medium leading-none whitespace-nowrap select-none ${s.base} ${s.dark} ${sz} ${className}`}
-      title={rank.viaPurchase ? `${rank.label} • Cliente do produto` : `${rank.label} • ${rank.totalPoints} pts`}
+      title={rank.viaPurchase ? `${rank.label} • Cliente do Guia Premium` : `${rank.label} • ${rank.totalPoints} pts`}
     >
       <span aria-hidden="true">{rank.emoji}</span>
       {showLabel && <span>{rank.label}</span>}
+      {/* Estrela discreta para clientes do produto — distingue quem pagou de visitante gratuito */}
+      {rank.viaPurchase && (
+        <span aria-hidden="true" className="ml-0.5 text-[hsl(var(--spain-yellow))] drop-shadow-[0_0_2px_rgba(0,0,0,0.4)]">★</span>
+      )}
     </span>
   );
 };

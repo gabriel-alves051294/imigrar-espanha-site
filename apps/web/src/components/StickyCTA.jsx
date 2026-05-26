@@ -4,6 +4,10 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { X, ShieldCheck } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
+// StickyCTA — flutuante desktop-only. Em mobile usamos MobileStickyBar (mais compacto)
+// pra evitar empilhar 3 elementos fixed (CookieBanner + StickyCTA + MobileStickyBar).
+const HOTMART_URL = "https://pay.hotmart.com/E105769769S?checkoutMode=10";
+
 const StickyCTA = () => {
   const [isVisible, setIsVisible] = useState(false);
   const [isDismissed, setIsDismissed] = useState(false);
@@ -19,7 +23,7 @@ const StickyCTA = () => {
       }
     };
 
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, [isDismissed]);
 
@@ -33,28 +37,30 @@ const StickyCTA = () => {
           animate={{ y: 0, opacity: 1 }}
           exit={{ y: 100, opacity: 0 }}
           transition={{ type: 'spring', stiffness: 260, damping: 20 }}
-          className="fixed bottom-4 left-4 right-4 md:left-1/2 md:-translate-x-1/2 md:w-full md:max-w-md z-50"
+          className="hidden md:block fixed bottom-4 left-1/2 -translate-x-1/2 w-full max-w-md z-50"
         >
           <div className="bg-card border border-border shadow-2xl rounded-2xl p-4 relative flex flex-col items-center text-center">
-            <button 
+            <button
               onClick={() => setIsDismissed(true)}
               className="absolute top-2 right-2 text-muted-foreground hover:text-foreground transition-colors p-1"
               aria-label="Fechar"
             >
               <X className="h-4 w-4" />
             </button>
-            
-            <Button 
-              size="lg" 
+
+            <Button
+              size="lg"
               className="w-full bg-secondary text-secondary-foreground hover:bg-secondary/90 text-lg font-semibold mb-2 shadow-lg shadow-secondary/20"
               asChild
             >
-              <a href="#oferta">Acessar Guia Premium - R$ 67,00</a>
+              <a href={HOTMART_URL} target="_blank" rel="noopener noreferrer">
+                Quero meu guia · R$67
+              </a>
             </Button>
-            
+
             <div className="flex items-center justify-center gap-1.5 text-xs text-muted-foreground">
               <ShieldCheck className="h-3.5 w-3.5 text-[hsl(var(--trust))]" />
-              <span>Acesso imediato após pagamento | 30 dias de garantia</span>
+              <span>Pagamento em segundos · 30 dias de garantia</span>
             </div>
           </div>
         </motion.div>

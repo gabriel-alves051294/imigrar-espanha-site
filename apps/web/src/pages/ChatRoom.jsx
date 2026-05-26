@@ -86,7 +86,10 @@ const ChatRoom = () => {
         <div className="max-w-4xl mx-auto flex flex-col gap-4">
           <div className="text-center py-4 mb-4 border-b">
             <h1 className="text-xl font-bold">Sala: {roomName.toUpperCase()}</h1>
-            <p className="text-sm text-muted-foreground">Bem-vindo ao chat em tempo real. Respeite as regras.</p>
+            <p className="text-sm text-muted-foreground">
+              Conversa em tempo real — troque dicas, dúvidas e vitórias.
+              Mensagens somem em 6h pra manter o chat leve.
+            </p>
           </div>
 
           {isLoading ? (
@@ -99,15 +102,17 @@ const ChatRoom = () => {
               // Disparidade visual da bolha por tier
               const isGhost = rank.tier === 'imigrante';
               const isRoyal = rank.tier === 'cidadao';
-              const nameClass = isGhost
-                ? 'text-slate-400 italic'
-                : isRoyal
+              // Eleve, não rebaixe: o tier inicial ('imigrante') recebia bolha
+              // cinza apagada que parecia "fantasma da sala" — exclusão social
+              // codificada num produto que promete "espaço seguro". Trocado
+              // por tom acolhedor verde-claro com tipografia normal.
+              const nameClass = isRoyal
                 ? 'text-yellow-600 dark:text-yellow-400 font-semibold drop-shadow-[0_0_4px_rgba(234,179,8,0.5)]'
                 : 'text-muted-foreground';
               const bubbleClass = isMe
                 ? 'bg-primary text-primary-foreground rounded-tr-sm'
                 : isGhost
-                ? 'bg-slate-100 text-slate-500 dark:bg-slate-800/40 dark:text-slate-400 rounded-tl-sm'
+                ? 'bg-emerald-50 text-foreground border border-emerald-200 dark:bg-emerald-950/20 dark:border-emerald-900/50 rounded-tl-sm'
                 : isRoyal
                 ? 'bg-gradient-to-br from-yellow-100 to-amber-50 dark:from-yellow-900/30 dark:to-amber-900/20 text-foreground border border-yellow-400/40 rounded-tl-sm'
                 : 'bg-muted text-foreground rounded-tl-sm';

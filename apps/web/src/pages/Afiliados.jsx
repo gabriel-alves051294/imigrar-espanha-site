@@ -28,7 +28,7 @@ const Afiliados = () => {
         <div className="absolute inset-0 bg-gradient-to-br from-primary via-primary/95 to-primary/80 z-0"></div>
         <div className="container relative z-10 text-center max-w-3xl mx-auto">
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
+            initial={false}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
           >

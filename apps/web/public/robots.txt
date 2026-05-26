@@ -2,6 +2,10 @@ User-agent: *
 Allow: /
 Disallow: /auth/
 Disallow: /comunidade/chat
+Disallow: /comunidade/t/*/editar
+Disallow: /blog/novo
+Disallow: /blog/*/editar
+Disallow: /perfil
 Disallow: /api/
 
 Sitemap: https://imigrarparaespanha.com.br/sitemap.xml

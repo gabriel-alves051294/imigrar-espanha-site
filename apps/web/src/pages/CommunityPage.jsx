@@ -1,17 +1,33 @@
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet';
 import { Link } from 'react-router-dom';
-import { MessageSquare, FileText, MessagesSquare, ArrowRight } from 'lucide-react';
+import { MessageSquare, FileText, MessagesSquare, ArrowRight, Sparkles, X } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import AdSlot from '@/components/AdSlot.jsx';
+import { useAuth } from '@/contexts/AuthContext.jsx';
 
 const CommunityPage = () => {
+  const { session } = useAuth();
+  const [showWelcome, setShowWelcome] = useState(false);
+
+  // Banner de boas-vindas no PRIMEIRO acesso pós-signup. Flag é setada
+  // no AuthContext.signUp() pra evitar mostrar pra usuário que só fez login.
+  useEffect(() => {
+    try {
+      if (session && localStorage.getItem('first_visit_pending') === '1') {
+        setShowWelcome(true);
+        localStorage.removeItem('first_visit_pending');
+      }
+    } catch (_) { /* storage indisponível */ }
+  }, [session]);
+
   return (
     <div className="bg-[hsl(var(--community-bg))] min-h-screen pb-20">
       <Helmet>
         <title>Comunidade | Do Brasil para a Espanha</title>
         <meta name="description" content="Conecte-se com outros brasileiros, tire dúvidas no fórum, leia nosso blog e participe do chat ao vivo." />
+        <link rel="canonical" href="https://imigrarparaespanha.com.br/comunidade" />
       </Helmet>
 
       {/* Hero Section */}
@@ -25,6 +41,36 @@ const CommunityPage = () => {
           </p>
         </div>
       </section>
+
+      {/* Banner de onboarding pós-signup — só aparece uma vez */}
+      {showWelcome && session && (
+        <div className="container max-w-5xl mx-auto px-4 -mt-6 relative z-20">
+          <div className="bg-secondary text-secondary-foreground rounded-xl shadow-lg p-5 md:p-6 flex items-start gap-4">
+            <div className="hidden sm:flex h-10 w-10 rounded-full bg-white/15 items-center justify-center shrink-0">
+              <Sparkles className="h-5 w-5" />
+            </div>
+            <div className="flex-1">
+              <h2 className="font-semibold text-lg mb-1">
+                Olá, {session.name?.split(' ')[0] || 'brasileiro'}! Bem-vindo à comunidade.
+              </h2>
+              <p className="text-sm opacity-90 leading-relaxed mb-3">
+                Em 3 passos você se sente em casa:{' '}
+                <Link to="/comunidade/chat" className="underline font-medium">apresente-se no chat</Link>,{' '}
+                <Link to="/comunidade/c/todas" className="underline font-medium">veja tópicos recentes no fórum</Link>{' '}
+                e{' '}
+                <Link to="/sobre" className="underline font-medium">conheça a história por trás do projeto</Link>.
+              </p>
+            </div>
+            <button
+              onClick={() => setShowWelcome(false)}
+              className="text-secondary-foreground/80 hover:text-secondary-foreground transition-colors p-1"
+              aria-label="Fechar boas-vindas"
+            >
+              <X className="h-4 w-4" />
+            </button>
+          </div>
+        </div>
+      )}
 
       <div className="container max-w-6xl mx-auto mt-[-40px] relative z-10 px-4">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">

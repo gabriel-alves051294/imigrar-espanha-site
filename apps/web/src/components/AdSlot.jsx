@@ -40,13 +40,10 @@ const AdSlot = ({ slot, format = 'auto', responsive = true }) => {
     return () => observer.disconnect();
   }, [client]);
 
-  // Don't render ads if no client ID is provided in non-production
+  // Sem client real (placeholder/dev): nao renderiza nada — evita "espaço publicitário reservado"
+  // poluindo a percepção premium do produto.
   if (!client || client.includes('000000')) {
-    return (
-      <div className="ad-container text-muted-foreground text-sm">
-        [ Espaço Publicitário Reservado ]
-      </div>
-    );
+    return null;
   }
 
   return (

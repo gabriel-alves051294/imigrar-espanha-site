@@ -5,6 +5,8 @@ import ScrollToTop from './components/ScrollToTop.jsx';
 import Header from './components/Header.jsx';
 import Footer from './components/Footer.jsx';
 import CookieBanner from './components/CookieBanner.jsx';
+import StickyCTA from './components/StickyCTA.jsx';
+import MobileStickyBar from './components/MobileStickyBar.jsx';
 import { Toaster } from 'sonner';
 
 import HomePage from './pages/HomePage.jsx';
@@ -91,6 +93,11 @@ function App() {
         </main>
 
         <Footer />
+        {/* CTAs persistentes globais — antes ficavam apenas em HomePage,
+            o que matava conversão de tráfego long-tail que cai direto em /sobre,
+            /afiliados, /blog ou /comunidade via Google/anúncios. */}
+        <StickyCTA />
+        <MobileStickyBar />
         <CookieBanner />
         <Toaster position="bottom-center" />
       </div>

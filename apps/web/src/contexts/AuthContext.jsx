@@ -25,17 +25,22 @@ export const AuthProvider = ({ children }) => {
     return () => unsubscribe();
   }, []);
 
+  // Nome formatado pro provider (Google, Facebook, etc) — só estética dos toasts.
+  const providerLabel = (p) => (p ? p.charAt(0).toUpperCase() + p.slice(1) : 'rede social');
+
   const signInWith = (provider) => {
     setError(null);
     return pb.collection('users').authWithOAuth2({ provider })
       .then((authData) => {
         setSession(authData.record);
-        toast.success(`Bem-vindo, ${authData.record.name || 'usuário'}!`);
+        const nome = authData.record.name?.split(' ')[0] || 'amigo';
+        toast.success(`Boas-vindas, ${nome}! Sua jornada começa aqui.`);
         return authData;
       })
       .catch((err) => {
-        setError('Falha ao autenticar com ' + provider);
-        toast.error('Falha ao autenticar com ' + provider);
+        const msg = `O login com ${providerLabel(provider)} não foi concluído. Tente de novo ou use e-mail e senha.`;
+        setError(msg);
+        toast.error(msg);
         throw err;
       });
   };
@@ -45,11 +50,13 @@ export const AuthProvider = ({ children }) => {
     try {
       const authData = await pb.collection('users').authWithPassword(email, password, { $autoCancel: false });
       setSession(authData.record);
-      toast.success('Login realizado com sucesso!');
+      const nome = authData.record.name?.split(' ')[0] || 'amigo';
+      toast.success(`Bem-vindo de volta, ${nome}.`);
       return authData;
     } catch (err) {
-      setError('Credenciais inválidas.');
-      toast.error('E-mail ou senha incorretos.');
+      const msg = 'E-mail ou senha não conferem. Tente novamente — se esqueceu, escreva pra contato@imigrarparaespanha.com.br.';
+      setError(msg);
+      toast.error(msg);
       throw err;
     }
   };
@@ -63,13 +70,17 @@ export const AuthProvider = ({ children }) => {
         passwordConfirm: password,
         name
       }, { $autoCancel: false });
-      
+
+      // Marca primeiro acesso pra CommunityPage exibir banner de onboarding.
+      try { localStorage.setItem('first_visit_pending', '1'); } catch (_) { /* storage indisponível */ }
+
       // Auto login after signup
       await loginWithPassword(email, password);
       return record;
     } catch (err) {
-      setError('Erro ao criar conta. E-mail pode já estar em uso.');
-      toast.error('Erro ao criar conta.');
+      const msg = 'Não conseguimos criar sua conta. Se você já tem cadastro, faça login. Se o problema continuar, escreva pra contato@imigrarparaespanha.com.br.';
+      setError(msg);
+      toast.error(msg);
       throw err;
     }
   };
@@ -77,7 +88,7 @@ export const AuthProvider = ({ children }) => {
   const signOut = () => {
     pb.authStore.clear();
     setSession(null);
-    toast.success('Você saiu da conta.');
+    toast.success('Até breve. Sua jornada continua quando você voltar.');
   };
 
   const value = {

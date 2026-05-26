@@ -49,11 +49,25 @@ const AuthModal = ({ open, onOpenChange }) => {
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-md bg-card text-card-foreground">
         <DialogHeader>
-          <DialogTitle className="text-2xl font-bold text-center">Acesse a Comunidade</DialogTitle>
+          <DialogTitle className="text-2xl font-bold text-center">Entrar na Comunidade</DialogTitle>
           <DialogDescription className="text-center">
-            Junte-se a milhares de brasileiros a caminho da Espanha.
+            Junte-se a milhares de brasileiros a caminho da Espanha — é gratuito.
           </DialogDescription>
         </DialogHeader>
+
+        {/* Atalho explícito pra quem já comprou e está procurando o PDF.
+            Resolve confusão de tráfego pós-Hotmart caindo aqui sem encontrar o material. */}
+        <div className="mt-3 rounded-lg border border-secondary/30 bg-secondary/5 px-3 py-2.5 text-sm">
+          <span className="font-medium">Já comprou o guia?</span>{' '}
+          <a
+            href="https://hotmart.com/club"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-secondary hover:underline font-medium"
+          >
+            Acesse seu material na Hotmart →
+          </a>
+        </div>
 
         <div className="flex flex-col gap-3 mt-4">
           <Button 

@@ -24,9 +24,9 @@ import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious
 
 import TestimonialsSection from '@/components/TestimonialsSection.jsx';
 import GuaranteeSection from '@/components/GuaranteeSection.jsx';
-import StickyCTA from '@/components/StickyCTA.jsx';
-import MobileStickyBar from '@/components/MobileStickyBar.jsx';
 import AdSlot from '@/components/AdSlot.jsx';
+// StickyCTA e MobileStickyBar agora são renderizados globalmente em App.jsx
+// para cobrir também /sobre, /afiliados, /blog, /comunidade.
 
 const HomePage = () => {
   const [courseDuration, setCourseDuration] = useState('1');
@@ -42,19 +42,57 @@ const HomePage = () => {
   const minimumAmount = calculateMinimumAmount();
   const hotmartLink = "https://pay.hotmart.com/E105769769S?checkoutMode=10";
 
+  // Structured data — Product + FAQPage + Organization. Habilita rich results no Google
+  // (preço, garantia, FAQ accordion direto na SERP). Zero impacto em backend.
+  const productSchema = {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    "name": "Guia Premium — Do Brasil para a Espanha",
+    "description": "Guia prático de 46 páginas para imigração legal do Brasil para a Espanha via FP de Grado Superior. Permissão automática para trabalhar e caminho para cidadania europeia em 2 anos.",
+    "brand": { "@type": "Brand", "name": "Do Brasil para a Espanha" },
+    "image": "https://imigrarparaespanha.com.br/guia-capa.png",
+    "offers": {
+      "@type": "Offer",
+      "url": hotmartLink,
+      "priceCurrency": "BRL",
+      "price": "67.00",
+      "availability": "https://schema.org/InStock",
+      "hasMerchantReturnPolicy": {
+        "@type": "MerchantReturnPolicy",
+        "applicableCountry": "BR",
+        "returnPolicyCategory": "https://schema.org/MerchantReturnFiniteReturnWindow",
+        "merchantReturnDays": 30,
+        "returnMethod": "https://schema.org/ReturnByMail",
+        "returnFees": "https://schema.org/FreeReturn"
+      }
+    }
+  };
+
+  const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      { "@type": "Question", "name": "Você é advogado de imigração?", "acceptedAnswer": { "@type": "Answer", "text": "Não somos advogados de imigração. O guia é um manual prático baseado nas leis oficiais do governo espanhol, estruturado de forma didática a partir de dezenas de casos validados." } },
+      { "@type": "Question", "name": "Funciona para quem tem mais de 40 anos?", "acceptedAnswer": { "@type": "Answer", "text": "Sim. A Espanha não impõe limite de idade para Formação Profissional. Para quem tem filhos, o processo exige passo extra na comprovação financeira (detalhado no guia)." } },
+      { "@type": "Question", "name": "E se as leis mudarem no meio do processo?", "acceptedAnswer": { "@type": "Answer", "text": "Você recebe 1 ano de atualizações gratuitas. Quando o BOE publica mudanças, enviamos a versão atualizada do guia para o seu e-mail." } },
+      { "@type": "Question", "name": "Funciona para quem não fala espanhol fluente?", "acceptedAnswer": { "@type": "Answer", "text": "Sim. O consulado não exige certificado de idioma para o visto de FP. O guia inclui modelos prontos em espanhol para contato com escolas." } },
+      { "@type": "Question", "name": "Qual o tempo de acesso após a compra?", "acceptedAnswer": { "@type": "Answer", "text": "Imediato. No mesmo segundo da aprovação do Pix ou cartão, a Hotmart envia o e-mail com login para download do PDF." } },
+      { "@type": "Question", "name": "Qual a política de reembolso?", "acceptedAnswer": { "@type": "Answer", "text": "30 dias de garantia incondicional pela Hotmart. Solicite o estorno em um clique na própria plataforma e devolvemos 100% do valor." } }
+    ]
+  };
+
   return (
     <>
       <Helmet>
         <title>Do Brasil para a Espanha - Guia Completo de Imigração Legal 2026</title>
-        <meta 
-          name="description" 
-          content="Guia completo para imigração legal do Brasil para a Espanha via FP de Grado Superior. Permissão automática de trabalho 30h/semana e cidadania europeia em 2 anos." 
+        <meta
+          name="description"
+          content="Guia completo para imigração legal do Brasil para a Espanha via FP de Grado Superior. Permissão automática de trabalho 30h/semana e cidadania europeia em 2 anos."
         />
         <link rel="canonical" href="https://imigrarparaespanha.com.br" />
+        <script type="application/ld+json">{JSON.stringify(productSchema)}</script>
+        <script type="application/ld+json">{JSON.stringify(faqSchema)}</script>
       </Helmet>
-
-      <StickyCTA />
-      <MobileStickyBar />
 
       {/* Hero Section */}
       <section 
@@ -67,8 +105,11 @@ const HomePage = () => {
         
         <div className="container py-20 relative z-10">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            {/* initial={false} = renderiza o estado final imediatamente.
+                Evita "tela escura" no above-the-fold em conexões lentas,
+                prefers-reduced-motion, scrapes e screenshots. */}
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
+              initial={false}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
             >
@@ -79,26 +120,28 @@ const HomePage = () => {
                 </span>
                 <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/10 text-white border border-white/20 text-sm font-medium">
                   <Users className="h-4 w-4" />
-                  Mais de 5.000+ vidas transformadas
+                  Manual completo · 46 páginas
                 </span>
               </div>
 
               <h1 className="text-white mb-4 leading-tight">
-                Imigre para a Espanha legalmente, sem assessoria de R$10 mil e sem medo de errar a burocracia.
+                Sua vida na Espanha começa por uma decisão simples.
               </h1>
               <p className="text-xl text-white/90 mb-8 leading-relaxed max-w-xl">
-                O passo a passo prático do visto FP de Grado Superior — o caminho legal que dá permissão de trabalho desde o primeiro dia e cidadania europeia em 2 anos. Atualizado para 2026.
+                O guia que substitui R$10 mil de assessoria pelo passo a passo do visto de estudante FP
+                <span className="text-white/70"> (Formação Profissional)</span>{' '}— com permissão automática para trabalhar
+                e caminho para cidadania europeia em 2 anos. Atualizado para 2026.
               </p>
 
               <div className="flex flex-col sm:flex-row gap-4 mb-4">
-                <Button 
+                <Button
                   size="lg"
                   className="bg-secondary text-secondary-foreground hover:bg-secondary/90 hover:shadow-[0_0_20px_hsla(var(--secondary),0.4)] text-lg px-8 py-6 transition-all duration-300 active:scale-[0.98]"
                   asChild
                 >
-                  <a href={hotmartLink} target="_blank" rel="noopener noreferrer">Comprar Guia agora — R$67</a>
+                  <a href={hotmartLink} target="_blank" rel="noopener noreferrer">Quero meu guia · R$67</a>
                 </Button>
-                <Button 
+                <Button
                   size="lg"
                   variant="outline"
                   className="text-lg px-8 py-6 bg-white/5 text-white border-white/20 hover:bg-white/10 hover:border-white/40 transition-all duration-300 active:scale-[0.98]"
@@ -108,12 +151,12 @@ const HomePage = () => {
                 </Button>
               </div>
               <p className="text-sm text-white/60 flex flex-col gap-1 mt-3">
-                <span>Pagamento processado pela Hotmart (ambiente seguro). R$67 à vista no Pix ou cartão. Acréscimo apenas no parcelamento.</span>
+                <span>Pagamento em segundos via Pix ou cartão (até 9x) processado pela Hotmart · 30 dias de garantia · Acesso imediato.</span>
               </p>
             </motion.div>
 
             <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
+              initial={false}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.6, delay: 0.2 }}
               className="order-first lg:order-last relative hidden md:block"
@@ -283,6 +326,23 @@ const HomePage = () => {
                     </div>
                   </div>
                 </div>
+
+                {/* CTA contextual — converte o pico de engajamento do simulador.
+                    Antes o usuário via o valor e saía sem ação possível. */}
+                <div className="mt-6 rounded-xl border border-secondary/30 bg-secondary/5 p-5 flex flex-col sm:flex-row sm:items-center gap-4">
+                  <p className="text-sm text-foreground/90 flex-1">
+                    Esse é o valor que o consulado vai exigir. O guia mostra <strong>exatamente como comprovar</strong>{' '}
+                    (extrato, carta de patrocínio, conversão BRL→EUR) — sem refazer documento por erro de formato.
+                  </p>
+                  <Button
+                    asChild
+                    className="bg-secondary text-secondary-foreground hover:bg-secondary/90 whitespace-nowrap"
+                  >
+                    <a href={hotmartLink} target="_blank" rel="noopener noreferrer">
+                      Quero meu guia · R$67
+                    </a>
+                  </Button>
+                </div>
               </CardContent>
             </Card>
           </motion.div>
@@ -420,7 +480,7 @@ const HomePage = () => {
               className="bg-secondary text-secondary-foreground hover:bg-secondary/90 hover:shadow-[0_0_20px_hsla(var(--secondary),0.4)] text-lg px-8 py-6 transition-all duration-300"
               asChild
             >
-              <a href={hotmartLink} target="_blank" rel="noopener noreferrer">Quero o Guia Premium por R$67</a>
+              <a href={hotmartLink} target="_blank" rel="noopener noreferrer">Quero meu guia · R$67</a>
             </Button>
           </div>
         </div>
@@ -470,7 +530,7 @@ const HomePage = () => {
                 </CardHeader>
                 <CardContent>
                   <p className="text-muted-foreground leading-relaxed">
-                    Modelos prontos e validados de Carta de Motivação e Carta de Patrocínio Financeiro em espanhol. Basta preencher com seus dados. Estes são os mesmos modelos que já aprovaram centenas de vistos.
+                    Modelos prontos de Carta de Motivação e Carta de Patrocínio Financeiro em espanhol, construídos a partir dos requisitos formais publicados pelo consulado. Basta preencher com seus dados — estrutura aprovada na primeira tentativa quando a documentação financeira é compatível.
                   </p>
                 </CardContent>
               </Card>
@@ -536,6 +596,47 @@ const HomePage = () => {
 
       <TestimonialsSection />
       <GuaranteeSection />
+
+      {/* O Que Acontece Depois — Customer Success começa ANTES da compra.
+          Antes o usuário só descobria o fluxo pós-pagamento na FAQ #9 (enterrado).
+          Visualizar a sequência reduz ansiedade e materializa o valor. */}
+      <section className="py-16 md:py-20 bg-background">
+        <div className="container max-w-5xl">
+          <div className="text-center mb-12">
+            <h2 className="mb-3">O que acontece nos próximos 5 minutos</h2>
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+              Transparência total sobre cada passo após o clique de compra.
+            </p>
+          </div>
+
+          <ol className="grid grid-cols-1 md:grid-cols-5 gap-4 md:gap-2">
+            {[
+              { n: '1', title: 'Pagamento aprovado', desc: 'Pix em segundos · cartão em até 9x na Hotmart.' },
+              { n: '2', title: 'E-mail com acesso', desc: 'A Hotmart envia automaticamente para o e-mail da compra.' },
+              { n: '3', title: 'PDF de 46 páginas', desc: 'Download imediato · funciona em celular, tablet, computador.' },
+              { n: '4', title: 'Convite à comunidade', desc: 'Acesso gratuito ao fórum, blog e chat com outros brasileiros.' },
+              { n: '5', title: 'Atualizações por 1 ano', desc: 'Mudou a lei? Você recebe a versão nova no seu e-mail.' },
+            ].map((step, i) => (
+              <li key={step.n} className="relative bg-card border border-border/60 rounded-xl p-5 flex flex-col">
+                <div className="flex items-center gap-3 mb-2">
+                  <span className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-secondary text-secondary-foreground font-bold text-sm shrink-0">
+                    {step.n}
+                  </span>
+                  <h3 className="text-base font-semibold leading-tight">{step.title}</h3>
+                </div>
+                <p className="text-sm text-muted-foreground leading-relaxed">{step.desc}</p>
+                {i < 4 && (
+                  <span aria-hidden="true" className="hidden md:block absolute top-1/2 -right-2 text-muted-foreground/40">→</span>
+                )}
+              </li>
+            ))}
+          </ol>
+
+          <p className="text-center text-sm text-muted-foreground mt-8">
+            Tudo automatizado pela Hotmart. Você nunca fica sem o material.
+          </p>
+        </div>
+      </section>
 
       {/* Offer Section */}
       <section id="oferta" className="py-16 bg-primary text-primary-foreground relative overflow-hidden">
@@ -604,7 +705,7 @@ const HomePage = () => {
                     className="w-full bg-secondary text-secondary-foreground hover:bg-secondary/90 hover:shadow-[0_0_20px_hsla(var(--secondary),0.3)] text-xl py-8 mb-4 transition-all duration-300 active:scale-[0.98]"
                     asChild
                   >
-                    <a href={hotmartLink} target="_blank" rel="noopener noreferrer">Comprar Guia agora — R$67</a>
+                    <a href={hotmartLink} target="_blank" rel="noopener noreferrer">Quero meu guia · R$67</a>
                   </Button>
 
                   <div className="flex items-center justify-center gap-4 text-sm text-muted-foreground">
@@ -613,7 +714,7 @@ const HomePage = () => {
                     </div>
                     <span>•</span>
                     <div className="flex items-center gap-1">
-                      <Users className="h-4 w-4" /> 5k+ Alunos
+                      <Users className="h-4 w-4" /> 30 dias de garantia
                     </div>
                   </div>
                 </CardContent>

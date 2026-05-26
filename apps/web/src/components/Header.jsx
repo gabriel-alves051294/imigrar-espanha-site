@@ -71,12 +71,13 @@ const Header = () => {
 
               <div className="pl-4 border-l border-primary-foreground/20 flex items-center">
                 {!session ? (
-                  <Button 
+                  <Button
                     onClick={() => setAuthOpen(true)}
                     variant="outline"
                     className="bg-transparent text-primary-foreground border-primary-foreground/30 hover:bg-primary-foreground/10"
+                    title="Entrar na comunidade gratuita ou criar sua conta"
                   >
-                    Entrar
+                    Entrar · Comunidade
                   </Button>
                 ) : (
                   <DropdownMenu>
@@ -161,7 +162,7 @@ const Header = () => {
                         onClick={() => { setIsOpen(false); setAuthOpen(true); }}
                         className="w-full bg-secondary text-secondary-foreground hover:bg-secondary/90"
                       >
-                        Entrar na Comunidade
+                        Entrar · Comunidade
                       </Button>
                     ) : (
                       <Button 

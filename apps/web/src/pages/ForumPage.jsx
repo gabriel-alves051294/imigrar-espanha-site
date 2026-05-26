@@ -4,6 +4,7 @@ import { Helmet } from 'react-helmet';
 import { Link, useNavigate } from 'react-router-dom';
 import pb from '@/lib/pocketbase.js';
 import { useAuth } from '@/contexts/AuthContext.jsx';
+import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 import { MessageSquarePlus, Clock, MessageCircle } from 'lucide-react';
@@ -47,6 +48,17 @@ const ForumPage = () => {
     navigate(`/comunidade/t/${newThread.id}`);
   };
 
+  // Abre o AuthModal global (escutado pelo Header) em vez de alert nativo.
+  // alert() é o pior padrão de UX possível em 2026 — quebra a estética premium do site.
+  const openAuthOrToggleForm = () => {
+    if (session) {
+      setShowForm((v) => !v);
+      return;
+    }
+    toast.info('Entre na conta para criar um tópico — leva 30 segundos.');
+    window.dispatchEvent(new CustomEvent('auth:open'));
+  };
+
   return (
     <div className="bg-[hsl(var(--community-bg))] min-h-screen py-12">
       <Helmet>
@@ -61,10 +73,9 @@ const ForumPage = () => {
           <div className="flex-1">
             <div className="flex justify-between items-center mb-8">
               <h1 className="text-3xl md:text-4xl font-bold">Fórum</h1>
-              <Button 
-                onClick={() => session ? setShowForm(!showForm) : navigate('/regras-comunidade')} // Temporary redirect for auth if needed, but Header handles auth
+              <Button
+                onClick={openAuthOrToggleForm}
                 className="hidden sm:flex"
-                disabled={!session}
                 title={!session ? 'Faça login para criar tópico' : ''}
               >
                 <MessageSquarePlus className="mr-2 h-4 w-4" />
@@ -143,8 +154,15 @@ const ForumPage = () => {
                   </React.Fragment>
                 ))
               ) : (
-                <div className="text-center py-12 text-muted-foreground bg-[hsl(var(--forum-card))] rounded-xl border">
-                  Nenhum tópico encontrado.
+                <div className="text-center py-16 px-6 bg-[hsl(var(--forum-card))] rounded-xl border">
+                  <MessageSquarePlus className="h-10 w-10 mx-auto mb-4 text-muted-foreground/60" />
+                  <h3 className="font-semibold text-foreground mb-2">Ainda não há tópicos nesta categoria.</h3>
+                  <p className="text-sm text-muted-foreground max-w-md mx-auto mb-5">
+                    Que tal abrir o primeiro? Sua dúvida pode ajudar outros brasileiros que estão na mesma etapa.
+                  </p>
+                  <Button onClick={openAuthOrToggleForm} variant="outline">
+                    <MessageSquarePlus className="mr-2 h-4 w-4" /> Criar primeiro tópico
+                  </Button>
                 </div>
               )}
             </div>
@@ -152,10 +170,9 @@ const ForumPage = () => {
 
           {/* Sidebar */}
           <aside className="w-full lg:w-80 space-y-6">
-            <Button 
-              onClick={() => session ? setShowForm(!showForm) : alert('Faça login para criar tópico')}
+            <Button
+              onClick={openAuthOrToggleForm}
               className="w-full sm:hidden mb-4"
-              disabled={!session}
             >
               <MessageSquarePlus className="mr-2 h-4 w-4" />
               Criar Tópico
