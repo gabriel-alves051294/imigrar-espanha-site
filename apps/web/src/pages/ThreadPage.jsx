@@ -5,7 +5,8 @@ import { useParams, Link } from 'react-router-dom';
 import pb from '@/lib/pocketbase.js';
 import { useAuth } from '@/contexts/AuthContext.jsx';
 import { Skeleton } from '@/components/ui/skeleton';
-import { Clock, ChevronLeft } from 'lucide-react';
+import { Clock, ChevronLeft, Pencil } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 import HotmartCTAWidget from '@/components/HotmartCTAWidget.jsx';
 import AdSlot from '@/components/AdSlot.jsx';
 import ReplyForm from '@/components/ReplyForm.jsx';
@@ -97,8 +98,19 @@ const ThreadPage = () => {
           <div className="flex-1">
             {/* Original Post */}
             <div className="bg-[hsl(var(--forum-card))] rounded-xl border p-6 md:p-8 mb-8">
-              <h1 className="text-2xl md:text-3xl font-bold mb-6">{thread.title}</h1>
-              
+              <div className="flex items-start justify-between gap-4 mb-6">
+                <h1 className="text-2xl md:text-3xl font-bold">{thread.title}</h1>
+                {/* Botão Editar — visível apenas para autor ou admin */}
+                {session && (session.id === thread.author || session.role === 'admin' || session.isAdmin) && (
+                  <Button asChild variant="outline" size="sm" className="shrink-0 gap-1.5 text-muted-foreground hover:text-foreground">
+                    <Link to={`/comunidade/t/${thread.id}/editar`}>
+                      <Pencil className="h-3.5 w-3.5" />
+                      Editar
+                    </Link>
+                  </Button>
+                )}
+              </div>
+
               <div className="flex items-center gap-4 mb-8 border-b pb-6">
                 <RankedAvatar
                   profile={thread.expand?.author}

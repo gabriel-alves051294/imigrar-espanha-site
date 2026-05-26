@@ -3,8 +3,10 @@ import React, { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet';
 import { useParams, Link } from 'react-router-dom';
 import pb from '@/lib/pocketbase.js';
+import { useAuth } from '@/contexts/AuthContext.jsx';
 import { Skeleton } from '@/components/ui/skeleton';
-import { ChevronLeft, Calendar } from 'lucide-react';
+import { ChevronLeft, Calendar, Pencil } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 import HotmartCTAWidget from '@/components/HotmartCTAWidget.jsx';
 import AdSlot from '@/components/AdSlot.jsx';
 import RankedAvatar from '@/components/RankedAvatar.jsx';
@@ -12,6 +14,7 @@ import RankBadge from '@/components/RankBadge.jsx';
 
 const BlogPostPage = () => {
   const { slug } = useParams();
+  const { session } = useAuth();
   const [post, setPost] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -79,6 +82,18 @@ const BlogPostPage = () => {
               <h1 className="text-3xl md:text-5xl font-extrabold mb-6 text-balance leading-tight">
                 {post.title}
               </h1>
+              {/* Botão Editar — visível apenas para autor ou admin */}
+              {session && (session.id === post.author || session.role === 'admin' || session.isAdmin) && (
+                <div className="mb-4">
+                  <Button asChild variant="outline" size="sm" className="gap-1.5 text-muted-foreground hover:text-foreground">
+                    <Link to={`/blog/${post.slug}/editar`}>
+                      <Pencil className="h-3.5 w-3.5" />
+                      Editar
+                    </Link>
+                  </Button>
+                </div>
+              )}
+
               <div className="flex items-center gap-4 text-muted-foreground border-b border-border/50 pb-6">
                 <RankedAvatar
                   profile={post.expand?.author}

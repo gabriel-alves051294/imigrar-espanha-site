@@ -24,6 +24,8 @@ import ChatRoom from './pages/ChatRoom.jsx';
 import BlogPage from './pages/BlogPage.jsx';
 import BlogPostPage from './pages/BlogPostPage.jsx';
 import BlogEditorPage from './pages/BlogEditorPage.jsx';
+import BlogEditPage from './pages/BlogEditPage.jsx';
+import ThreadEditPage from './pages/ThreadEditPage.jsx';
 import CommunityRulesPage from './pages/CommunityRulesPage.jsx';
 import AuthCallback from './pages/AuthCallback.jsx';
 import ProfilePage from './pages/ProfilePage.jsx';
@@ -56,7 +58,9 @@ function App() {
             {/* Rotas privadas — exigem sessão ativa */}
             <Route element={<RequireAuth />}>
               <Route path="/comunidade/chat/:slug?" element={<ChatRoom />} />
+              <Route path="/comunidade/t/:id/editar" element={<ThreadEditPage />} />
               <Route path="/blog/novo" element={<BlogEditorPage />} />
+              <Route path="/blog/:slug/editar" element={<BlogEditPage />} />
               <Route path="/perfil" element={<ProfilePage />} />
             </Route>
 
