@@ -56,7 +56,6 @@ const AboutPage = () => {
                         <Plane className="w-6 h-6 text-primary" />
                       </div>
                       <div>
-                        <h3 className="text-xl font-bold mb-3 text-foreground">O Gancho Emocional e a História</h3>
                         <p className="text-muted-foreground leading-relaxed">
                           Em 2007, com apenas 12 anos, pisei na Espanha pela primeira vez. Como muitas famílias brasileiras, fomos vítimas da desinformação na busca por um recomeço. Confiamos em promessas fáceis e atalhos de agências que, no fim das contas, só nos custaram tempo, dinheiro e uma enorme frustração. Aquela dor e a sensação de impotência me marcaram profundamente.
                         </p>
@@ -73,7 +72,6 @@ const AboutPage = () => {
                         <Search className="w-6 h-6 text-secondary" />
                       </div>
                       <div>
-                        <h3 className="text-xl font-bold mb-3 text-foreground">A Descoberta da Solução</h3>
                         <p className="text-muted-foreground leading-relaxed">
                           Anos mais tarde, decidido a desenhar um retorno seguro e definitivo, mergulhei a fundo nas leis de imigração espanholas. Foi então que descobri o "segredo" mais bem guardado e estável: o caminho pela educação através do FP (Formación Profesional) de Grado Superior. Uma rota 100% legal, segura e estratégica que garante residência e permissão automática de trabalho desde o primeiro dia.
                         </p>
@@ -90,7 +88,6 @@ const AboutPage = () => {
                         <AlertTriangle className="w-6 h-6 text-amber-600 dark:text-amber-500" />
                       </div>
                       <div>
-                        <h3 className="text-xl font-bold mb-3 text-amber-900 dark:text-amber-400">O Alinhamento de Expectativas</h3>
                         <p className="text-amber-800/90 dark:text-amber-200/80 leading-relaxed font-medium">
                           ⚠️ IMPORTANTE: Este guia foi feito para te dar 100% de autonomia e controle sobre o seu processo. Não somos uma agência e não vendemos falsas promessas. Ele substitui o trabalho de despachantes caros, entregando o passo a passo exato, modelos aprovados e conhecimento prático para você aplicar o seu visto por conta própria, economizando milhares de reais.
                         </p>
@@ -109,14 +106,12 @@ const AboutPage = () => {
               transition={{ duration: 0.6, delay: 0.2 }}
               className="order-1 lg:order-2 lg:sticky lg:top-24"
             >
-              <div className="relative rounded-2xl overflow-hidden shadow-xl border border-border/60 aspect-[4/5] md:aspect-[3/4] lg:aspect-[4/5] group max-w-md mx-auto lg:ml-auto lg:mr-0 bg-gradient-to-br from-primary via-primary/80 to-secondary flex items-center justify-center">
-                <span
-                  className="text-white font-extrabold opacity-30 select-none"
-                  style={{ fontSize: 'clamp(8rem, 22vw, 14rem)', lineHeight: 1 }}
-                  aria-hidden="true"
-                >
-                  GA
-                </span>
+              <div className="relative rounded-2xl overflow-hidden shadow-xl border border-border/60 aspect-[4/5] md:aspect-[3/4] lg:aspect-[4/5] group max-w-md mx-auto lg:ml-auto lg:mr-0">
+                <img
+                  src="/perfil-gabriel.png"
+                  alt="Gabriel Alves - Fundador & Autor"
+                  className="w-full h-full object-cover object-center"
+                />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex items-end p-8 opacity-90 transition-opacity duration-500 group-hover:opacity-100">
                   <div>
                     <p className="text-white font-bold text-2xl mb-1">Gabriel Alves</p>
@@ -234,3 +229,4 @@ const AboutPage = () => {
 };
 
 export default AboutPage;
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
